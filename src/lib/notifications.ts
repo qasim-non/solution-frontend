@@ -12,6 +12,7 @@ import { getFirebaseApp, isFirebaseConfigured } from './firebase';
 
 const DEVICE_ID_KEY = 'tamkkun_device_id';
 const FCM_TOKEN_KEY = 'tamkkun_fcm_token';
+const SW_ACTIVATION_TIMEOUT_MS = 10_000;
 
 /**
  * Stable id for this browser. It lets the backend link an anonymous customer
@@ -84,6 +85,54 @@ async function getMessagingInstance(): Promise<Messaging | null> {
 }
 
 /**
+ * Resolve once the registration has an active worker.
+ *
+ * `register()` resolves as soon as the worker starts installing. Calling
+ * PushManager.subscribe() before the worker is active throws
+ * "Subscription failed - no active Service Worker", so wait for the
+ * `activated` state and surface a readable error on failure.
+ */
+function waitForServiceWorkerActivation(
+  registration: ServiceWorkerRegistration
+): Promise<void> {
+  const pendingWorker = registration.installing ?? registration.waiting;
+
+  if (!pendingWorker) {
+    if (registration.active) {
+      return Promise.resolve();
+    }
+
+    return navigator.serviceWorker.ready.then(() => undefined);
+  }
+
+  return new Promise((resolve, reject) => {
+    let timeout: number;
+
+    const fail = () => {
+      window.clearTimeout(timeout);
+      pendingWorker.removeEventListener('statechange', onStateChange);
+      reject(
+        new Error('تعذر تفعيل خدمة الإشعارات. أعد تحميل الصفحة وحاول مرة أخرى.')
+      );
+    };
+
+    function onStateChange() {
+      if (pendingWorker.state === 'activated') {
+        window.clearTimeout(timeout);
+        pendingWorker.removeEventListener('statechange', onStateChange);
+        resolve();
+      } else if (pendingWorker.state === 'redundant') {
+        fail();
+      }
+    }
+
+    timeout = window.setTimeout(fail, SW_ACTIVATION_TIMEOUT_MS);
+    pendingWorker.addEventListener('statechange', onStateChange);
+    onStateChange();
+  });
+}
+
+/**
  * The service worker needs the Firebase config to initialize in the
  * background. The config is public, so passing it in the script URL is safe
  * and avoids a build-time code generation step.
@@ -106,9 +155,14 @@ async function getServiceWorkerRegistration(): Promise<ServiceWorkerRegistration
     }
   });
 
-  return navigator.serviceWorker.register(
-    `/firebase-messaging-sw.js?${params.toString()}`
+  const registration = await navigator.serviceWorker.register(
+    `/firebase-messaging-sw.js?${params.toString()}`,
+    { scope: '/', updateViaCache: 'none' }
   );
+
+  await waitForServiceWorkerActivation(registration);
+
+  return registration;
 }
 
 /**

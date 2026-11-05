@@ -10,6 +10,17 @@
  * notification opens the relevant page.
  */
 
+// Activate a new worker immediately. Without this, a freshly registered worker
+// stays in the "waiting" state while an older worker controls the page, and
+// PushManager.subscribe() fails with "no active Service Worker".
+self.addEventListener('install', () => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
 importScripts('https://www.gstatic.com/firebasejs/13.2.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/13.2.0/firebase-messaging-compat.js');
 
