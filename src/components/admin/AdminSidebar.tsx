@@ -2,12 +2,16 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, FileText, Mail, Plus, LogOut, Code2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { PushNotificationToggle } from '../common/PushNotificationToggle';
+import { unregisterPushNotifications } from '../../lib/notifications';
 
 export const AdminSidebar: React.FC = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    // Do not leave an admin device receiving notifications after logout.
+    void unregisterPushNotifications();
     logout();
     navigate('/login');
   };
@@ -56,6 +60,8 @@ export const AdminSidebar: React.FC = () => {
       </nav>
 
       <div className="mt-auto pt-4 border-t border-[#c3c6d7]/30 space-y-2">
+        <PushNotificationToggle showLabel />
+
         <button
           onClick={() => navigate('/request')}
           className="w-full bg-[#004ac6] text-white py-2.5 px-4 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[#2563eb] transition-colors shadow-sm"

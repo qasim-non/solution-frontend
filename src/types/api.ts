@@ -102,6 +102,7 @@ export interface CreateProjectRequestPayload {
   project_name: string;
   mobile: string;
   description?: string | null;
+  device_id?: string; // Stable browser id used for "request completed" push notifications
   system_types: number[]; // Array of SystemType IDs
   social_media?: Record<string, string>; // Optional map of platform ID ("1", "2") to URL/handle
 }
