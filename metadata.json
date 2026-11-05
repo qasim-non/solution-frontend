@@ -1,0 +1,6 @@
+{
+  "name": "Tamkkun Tech Portal",
+  "description": "Enterprise b2b web solution portal and admin management system for Tamkkun Tech",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
