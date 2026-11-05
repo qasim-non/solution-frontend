@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ArrowLeft } from 'lucide-react';
-import { PushNotificationToggle } from './PushNotificationToggle';
 
 export const TopNavBar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -58,8 +57,6 @@ export const TopNavBar: React.FC = () => {
 
         {/* Trailing Action */}
         <div className="flex items-center gap-3">
-          <PushNotificationToggle />
-
           <Link
             to="/request"
             className="hidden sm:inline-flex items-center justify-center bg-[#2563eb] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#004ac6] transition-all duration-200 active:scale-95 shadow-sm gap-2"

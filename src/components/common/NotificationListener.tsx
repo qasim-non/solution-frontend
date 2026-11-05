@@ -1,13 +1,23 @@
 import { useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import { analytics } from '../../lib/analytics';
 import { listenForForegroundMessages } from '../../lib/notifications';
 
 /**
  * Shows a browser notification when an FCM message arrives while the app is
  * open. Background messages are displayed by the service worker instead.
+ *
+ * Push notifications are admin-only, so the listener only runs for an
+ * authenticated admin session.
  */
 export function NotificationListener(): null {
+  const { isAuthenticated } = useAuth();
+
   useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+
     let unsubscribe: (() => void) | undefined;
     let cancelled = false;
 
@@ -55,7 +65,7 @@ export function NotificationListener(): null {
       cancelled = true;
       unsubscribe?.();
     };
-  }, []);
+  }, [isAuthenticated]);
 
   return null;
 }

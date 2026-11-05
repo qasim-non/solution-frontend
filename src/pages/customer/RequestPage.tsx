@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { customerApi } from '../../api/customer';
 import { adminApi } from '../../api/admin';
 import { SystemType } from '../../types/api';
-import { getDeviceId } from '../../lib/notifications';
 import { analytics } from '../../lib/analytics';
 import { Send, ChevronUp, ChevronDown, Info, Computer, Globe, Smartphone } from 'lucide-react';
 
@@ -97,7 +96,6 @@ export const RequestPage: React.FC = () => {
         project_name: projectName.trim(),
         mobile: fullMobile,
         description: description.trim() || undefined,
-        device_id: getDeviceId(),
         system_types: selectedSystemTypes,
         social_media: Object.keys(cleanedSocial).length ? cleanedSocial : undefined,
       });

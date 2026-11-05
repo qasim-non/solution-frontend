@@ -8,30 +8,11 @@ import {
   type Messaging,
 } from 'firebase/messaging';
 import { apiClient } from '../api/client';
+import { storage } from '../utils/storage';
 import { getFirebaseApp, isFirebaseConfigured } from './firebase';
 
-const DEVICE_ID_KEY = 'tamkkun_device_id';
 const FCM_TOKEN_KEY = 'tamkkun_fcm_token';
 const SW_ACTIVATION_TIMEOUT_MS = 10_000;
-
-/**
- * Stable id for this browser. It lets the backend link an anonymous customer
- * request to the push token that should receive the "request completed" event.
- */
-export function getDeviceId(): string {
-  let deviceId = localStorage.getItem(DEVICE_ID_KEY);
-
-  if (!deviceId) {
-    deviceId =
-      typeof crypto !== 'undefined' && 'randomUUID' in crypto
-        ? crypto.randomUUID()
-        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-
-    localStorage.setItem(DEVICE_ID_KEY, deviceId);
-  }
-
-  return deviceId;
-}
 
 export function getVapidKey(): string | null {
   const key = import.meta.env.VITE_FIREBASE_VAPID_KEY?.trim();
@@ -170,6 +151,12 @@ async function getServiceWorkerRegistration(): Promise<ServiceWorkerRegistration
  * backend. Must be triggered by an explicit user action (never on page load).
  */
 export async function registerPushNotifications(): Promise<string> {
+  // Push notifications are an admin-only feature. The API also enforces this,
+  // but failing early gives the user a clear message.
+  if (!storage.getToken()) {
+    throw new Error('يجب تسجيل الدخول كمدير لتفعيل الإشعارات.');
+  }
+
   if (!isPushConfigured()) {
     throw new Error('إشعارات الدفع غير مهيأة على هذا الموقع.');
   }
@@ -197,7 +184,6 @@ export async function registerPushNotifications(): Promise<string> {
 
   await apiClient.post('/device-tokens', {
     token,
-    device_id: getDeviceId(),
     platform: 'web',
   });
 
@@ -214,7 +200,11 @@ export async function unregisterPushNotifications(): Promise<void> {
 
   if (token) {
     try {
-      await apiClient.delete('/device-tokens', { data: { token } });
+      await apiClient.delete('/device-tokens', {
+        data: { token },
+        // Logout waits for this call, so never block it for long.
+        timeout: 5_000,
+      });
     } catch (error) {
       console.warn('[firebase] Failed to remove the device token from the API.', error);
     }

@@ -9,9 +9,10 @@ export const AdminSidebar: React.FC = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // Do not leave an admin device receiving notifications after logout.
-    void unregisterPushNotifications();
+    // Wait for the API call so the request still carries the admin token.
+    await unregisterPushNotifications();
     logout();
     navigate('/login');
   };
@@ -71,7 +72,7 @@ export const AdminSidebar: React.FC = () => {
         </button>
 
         <button
-          onClick={handleLogout}
+          onClick={() => void handleLogout()}
           className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-[#ba1a1a] hover:bg-[#ffdad6] rounded-xl transition-colors"
         >
           <LogOut className="w-5 h-5" />

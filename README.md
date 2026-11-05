@@ -21,6 +21,10 @@ View your app in AI Studio: https://ai.studio/apps/6af1166f-d764-4316-9e6a-bf961
 
 ## Firebase (Analytics + Web Push)
 
+Analytics is available to every visitor. Web push is **admin-only**: only an
+authenticated admin can enable it from the admin sidebar, and the API rejects
+token registration from customers or unauthenticated users.
+
 Copy the Firebase values into `.env.development` / `.env.production`:
 
 ```dotenv
