@@ -63,6 +63,13 @@ const refreshTokenPair = (refreshToken: string): Promise<AuthTokenPair> => {
           throw new Error('The refresh endpoint returned an invalid token pair.');
         }
 
+        storage.replaceTokens(data.data.token, data.data.refresh_token);
+        window.dispatchEvent(
+          new CustomEvent('auth:tokens-updated', {
+            detail: { accessToken: data.data.token },
+          }),
+        );
+
         return data.data;
       })
       .finally(() => {
@@ -98,10 +105,25 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // A retried request was also rejected: the session is no longer usable.
+    // A different request may already have rotated the token pair. In that
+    // case, retry this stale request with the newest access token instead of
+    // trying to consume the previous refresh token a second time.
     if (originalRequest._retry) {
       notifyUnauthenticated();
       return Promise.reject(error);
+    }
+
+    const latestAccessToken = storage.getAccessToken();
+    const requestAuthorization = originalRequest.headers.Authorization;
+
+    if (
+      latestAccessToken &&
+      requestAuthorization !== `Bearer ${latestAccessToken}`
+    ) {
+      originalRequest._retry = true;
+      originalRequest.headers.Authorization = `Bearer ${latestAccessToken}`;
+
+      return apiClient(originalRequest);
     }
 
     const refreshToken = storage.getRefreshToken();
@@ -118,18 +140,19 @@ apiClient.interceptors.response.use(
       // important because refresh tokens are single-use and rotated by Laravel.
       const tokens = await refreshTokenPair(refreshToken);
 
-      storage.replaceTokens(tokens.token, tokens.refresh_token);
       originalRequest.headers.Authorization = `${tokens.token_type || 'Bearer'} ${tokens.token}`;
-
-      window.dispatchEvent(
-        new CustomEvent('auth:tokens-updated', {
-          detail: { accessToken: tokens.token },
-        }),
-      );
 
       return apiClient(originalRequest);
     } catch (refreshError) {
-      notifyUnauthenticated();
+      const refreshStatus = (refreshError as AxiosError).response?.status;
+
+      // A rejected/expired refresh token ends the session. Keep the pair for
+      // transient network or server errors so a temporary outage does not
+      // unnecessarily sign the admin out.
+      if (refreshStatus === 401 || refreshStatus === 403) {
+        notifyUnauthenticated();
+      }
+
       return Promise.reject(refreshError);
     }
   },
