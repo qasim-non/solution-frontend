@@ -2,15 +2,27 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, FileText, Mail, Plus, LogOut, Code2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { PushNotificationToggle } from '../common/PushNotificationToggle';
+import { unregisterPushNotifications } from '../../lib/notifications';
 
 export const AdminSidebar: React.FC = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    void logout()
-      .catch(() => undefined)
-      .finally(() => navigate('/login', { replace: true }));
+  const handleLogout = async () => {
+    // Remove this browser's FCM registration while the access token is still
+    // available. Backend logout also removes every device token in the session.
+    try {
+      await unregisterPushNotifications();
+    } catch (error) {
+      console.warn('[firebase] Push unregistration failed during logout.', error);
+    } finally {
+      // Logout clears local tokens even if the API cannot be reached.
+      await logout().catch((error) => {
+        console.warn('[auth] Server-side logout could not be confirmed.', error);
+      });
+      navigate('/login', { replace: true });
+    }
   };
 
   const navItems = [
@@ -57,6 +69,8 @@ export const AdminSidebar: React.FC = () => {
       </nav>
 
       <div className="mt-auto pt-4 border-t border-[#c3c6d7]/30 space-y-2">
+        <PushNotificationToggle showLabel />
+
         <button
           onClick={() => navigate('/request')}
           className="w-full bg-[#004ac6] text-white py-2.5 px-4 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[#2563eb] transition-colors shadow-sm"
@@ -66,7 +80,7 @@ export const AdminSidebar: React.FC = () => {
         </button>
 
         <button
-          onClick={handleLogout}
+          onClick={() => void handleLogout()}
           className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-[#ba1a1a] hover:bg-[#ffdad6] rounded-xl transition-colors"
         >
           <LogOut className="w-5 h-5" />
