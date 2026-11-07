@@ -8,8 +8,9 @@ export const AdminSidebar: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
-    navigate('/login');
+    void logout()
+      .catch(() => undefined)
+      .finally(() => navigate('/login', { replace: true }));
   };
 
   const navItems = [

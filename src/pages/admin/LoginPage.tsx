@@ -26,7 +26,7 @@ export const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      await login({ username: username.trim(), password: password.trim() });
+      await login({ username: username.trim(), password }, rememberMe);
       navigate('/dashboard');
     } catch (err: unknown) {
       if (err && typeof err === 'object' && 'response' in err && err.response && typeof err.response === 'object' && 'data' in err.response) {

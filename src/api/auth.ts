@@ -1,9 +1,21 @@
 import { apiClient } from './client';
-import { LoginRequest, LoginResponse } from '../types/api';
+import type {
+  ApiSuccessResponse,
+  AuthTokenPair,
+  LoginRequest,
+} from '../types/api';
 
 export const authApi = {
-  login: async (credentials: LoginRequest): Promise<LoginResponse> => {
-    const response = await apiClient.post<LoginResponse>('/login', credentials);
-    return response.data;
+  login: async (credentials: LoginRequest): Promise<AuthTokenPair> => {
+    const response = await apiClient.post<ApiSuccessResponse<AuthTokenPair>>(
+      '/login',
+      credentials,
+    );
+
+    return response.data.data;
+  },
+
+  logout: async (): Promise<void> => {
+    await apiClient.post<ApiSuccessResponse<null>>('/auth/logout');
   },
 };

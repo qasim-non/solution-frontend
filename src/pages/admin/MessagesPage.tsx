@@ -18,7 +18,7 @@ export const MessagesPage: React.FC = () => {
     adminApi
       .getMessages()
       .then((res) => {
-        setMessages(res.messages || []);
+        setMessages(res.data || []);
       })
       .catch(() => {
         setErrorMsg('تعذر تحميل الرسائل. قد تكون الجلسة منتهية — يرجى تسجيل الدخول من جديد.');

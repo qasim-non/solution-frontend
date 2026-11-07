@@ -9,17 +9,19 @@
 // ==========================================
 
 export interface ApiSuccessResponse<T = unknown> {
+  success: true;
   message: string;
-  data?: T;
+  data: T;
 }
 
 export interface ApiErrorResponse {
-  status: 'error';
+  success: false;
   message: string;
+  data: null;
+  errors?: Record<string, string[]>;
 }
 
-export interface ApiValidationErrorResponse {
-  message: string;
+export interface ApiValidationErrorResponse extends ApiErrorResponse {
   errors: Record<string, string[]>;
 }
 
@@ -32,10 +34,14 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse {
-  message: string;
+export interface AuthTokenPair {
   token: string;
+  refresh_token: string;
+  token_type: 'Bearer' | string;
+  expires_in: number;
 }
+
+export type LoginResponse = ApiSuccessResponse<AuthTokenPair>;
 
 export interface AuthState {
   token: string | null;
@@ -51,10 +57,7 @@ export interface SystemType {
   name: string; // e.g. "Website", "Mobile Application", "Desktop Application", "Web", "Mobile App"
 }
 
-export interface GetSystemTypesResponse {
-  message: string;
-  types: SystemType[];
-}
+export type GetSystemTypesResponse = ApiSuccessResponse<SystemType[]>;
 
 // ==========================================
 // 4. CONTACT INFO & PUBLIC MESSAGES MODULE
@@ -66,10 +69,7 @@ export interface ContactInfoItem {
   value: string;
 }
 
-export interface GetContactInfoResponse {
-  message: string;
-  data: ContactInfoItem[];
-}
+export type GetContactInfoResponse = ApiSuccessResponse<ContactInfoItem[]>;
 
 export interface SendContactMessageRequest {
   full_name: string;
@@ -77,9 +77,7 @@ export interface SendContactMessageRequest {
   text_message: string;
 }
 
-export interface SendContactMessageResponse {
-  message: string;
-}
+export type SendContactMessageResponse = ApiSuccessResponse<null>;
 
 export interface ContactMessage {
   id?: number;
@@ -89,10 +87,7 @@ export interface ContactMessage {
   created_at: string;
 }
 
-export interface GetMessagesResponse {
-  message: string;
-  messages: ContactMessage[];
-}
+export type GetMessagesResponse = ApiSuccessResponse<ContactMessage[]>;
 
 // ==========================================
 // 5. PROJECT REQUESTS MODULE
@@ -106,9 +101,7 @@ export interface CreateProjectRequestPayload {
   social_media?: Record<string, string>; // Optional map of platform ID ("1", "2") to URL/handle
 }
 
-export interface CreateProjectRequestResponse {
-  message: string;
-}
+export type CreateProjectRequestResponse = ApiSuccessResponse<null>;
 
 export interface ProjectRequestSystemTypePivot {
   requests_id: number;
@@ -138,10 +131,7 @@ export interface GetRequestsQueryParams {
   end_date?: string;   // YYYY-MM-DD
 }
 
-export interface GetRequestsResponse {
-  message: string;
-  data: ProjectRequest[];
-}
+export type GetRequestsResponse = ApiSuccessResponse<ProjectRequest[]>;
 
 // ==========================================
 // 6. SOCIAL MEDIA ACCOUNTS MODULE
@@ -158,10 +148,7 @@ export interface SocialMediaAccountItem {
   platform: SocialMediaPlatform;
 }
 
-export interface GetSocialMediaAccountsResponse {
-  message: string;
-  messages: SocialMediaAccountItem[];
-}
+export type GetSocialMediaAccountsResponse = ApiSuccessResponse<SocialMediaAccountItem[]>;
 
 // ==========================================
 // 7. DASHBOARD MODULE
@@ -183,15 +170,10 @@ export interface DashboardData {
   oldest_requests: OldestRequestSummary[];
 }
 
-export interface GetDashboardResponse {
-  message: string;
-  data: DashboardData;
-}
+export type GetDashboardResponse = ApiSuccessResponse<DashboardData>;
 
 // ==========================================
 // 8. ADMIN ACTIONS (STATUS UPDATES)
 // ==========================================
 
-export interface UpdateRequestStatusResponse {
-  message: string;
-}
+export type UpdateRequestStatusResponse = ApiSuccessResponse<null>;

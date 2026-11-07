@@ -32,7 +32,7 @@ export const RequestPage: React.FC = () => {
     adminApi
       .getSystemTypes()
       .then((res) => {
-        setSystemTypes(res.types || []);
+        setSystemTypes(res.data || []);
       })
       .catch(() => {
         setSystemTypes([

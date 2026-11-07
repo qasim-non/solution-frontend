@@ -54,7 +54,7 @@ export const RequestsPage: React.FC = () => {
     // Initial fetch of requests and system categories
     adminApi
       .getSystemTypes()
-      .then((res) => setSystemTypes(res.types || []))
+      .then((res) => setSystemTypes(res.data || []))
       .catch(() => setSystemTypes([]));
     fetchRequests();
   }, [fetchRequests]);
@@ -71,7 +71,7 @@ export const RequestsPage: React.FC = () => {
 
     try {
       const res = await adminApi.getSocialMediaAccounts(req.id);
-      setSocialAccounts(res.messages || []);
+      setSocialAccounts(res.data || []);
     } catch {
       setSocialAccounts([]);
     } finally {
