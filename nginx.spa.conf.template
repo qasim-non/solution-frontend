@@ -7,6 +7,12 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
+    # Service worker must always be revalidated so push handling updates ship.
+    location = /firebase-messaging-sw.js {
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        try_files $uri =404;
+    }
+
     # SPA routing - always serve index.html for client-side routes
     location / {
         try_files $uri $uri/ /index.html;
