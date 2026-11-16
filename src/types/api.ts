@@ -177,3 +177,65 @@ export type GetDashboardResponse = ApiSuccessResponse<DashboardData>;
 // ==========================================
 
 export type UpdateRequestStatusResponse = ApiSuccessResponse<null>;
+
+// ==========================================
+// 9. DEVELOPER REGISTRATION MODULE (PUBLIC)
+// ==========================================
+
+export interface City {
+  id: number;
+  name: string;
+}
+
+export interface DeveloperSpecialization {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+export type GetCitiesResponse = ApiSuccessResponse<City[]>;
+export type GetDeveloperSpecializationsResponse =
+  ApiSuccessResponse<DeveloperSpecialization[]>;
+
+/**
+ * The backend validates the exact Arabic label for this field, so the union
+ * values must stay byte-for-byte identical to the API contract.
+ */
+export type DeveloperExperienceYears =
+  | 'أقل من سنة'
+  | '1 - 2 سنوات'
+  | '3 - 5 سنوات'
+  | 'أكثر من 5 سنوات';
+
+export type DeveloperContractType = 'full_time' | 'freelance' | 'both';
+
+export type DeveloperWeeklyHours = '10_20' | '20_30' | 'full_time_40';
+
+export interface DeveloperRegistrationPayload {
+  full_name: string;
+  mobile: string;
+  city_id: number;
+  is_ready: boolean;
+  experience_years: DeveloperExperienceYears;
+  has_institutional_experience: boolean;
+  completed_projects_count?: number;
+  contract_type: DeveloperContractType;
+  weekly_hours: DeveloperWeeklyHours;
+  is_remote_ready: boolean;
+  bio?: string;
+  specialization_ids?: number[];
+  technologies?: string[];
+  cv?: File | null;
+  portfolio?: File | null;
+}
+
+export interface DeveloperRegistrationResult {
+  id: number;
+  reference_number: string;
+  mobile: string;
+  specializations: string[];
+  status: 'pending' | string;
+}
+
+export type DeveloperRegistrationResponse =
+  ApiSuccessResponse<DeveloperRegistrationResult>;

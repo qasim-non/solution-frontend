@@ -196,13 +196,22 @@ export const LandingPage: React.FC = () => {
           <p className="text-base text-[#434655]">
             ابدأ الآن وأرسل تفاصيل مشروعك وسنتواصل معك في أقرب وقت.
           </p>
-          <Link
-            to="/request"
-            className="bg-[#2563eb] text-white text-lg font-semibold px-10 py-4 rounded-xl shadow-lg hover:bg-[#004ac6] transition-all active:scale-95 flex items-center gap-3"
-          >
-            <span>إرسال طلب جديد</span>
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+            <Link
+              to="/request"
+              className="bg-[#2563eb] text-white text-lg font-semibold px-10 py-4 rounded-xl shadow-lg hover:bg-[#004ac6] transition-all active:scale-95 flex items-center gap-3"
+            >
+              <span>إرسال طلب جديد</span>
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+            <Link
+              to="/join-developer"
+              className="bg-white text-[#004ac6] text-lg font-semibold px-8 py-4 rounded-xl border border-[#004ac6]/30 hover:bg-[#f2f4f6] transition-all active:scale-95 flex items-center gap-3"
+            >
+              <span>انضم كمطور</span>
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+          </div>
         </div>
       </section>
     </div>

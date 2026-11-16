@@ -18,6 +18,9 @@ export const Footer: React.FC = () => {
           <Link to="/services" className="hover:text-[#004ac6] transition-colors">
             خدماتنا
           </Link>
+          <Link to="/join-developer" className="hover:text-[#004ac6] transition-colors">
+            انضم كمطور
+          </Link>
           <Link to="/contact" className="hover:text-[#004ac6] transition-colors">
             تواصل معنا
           </Link>

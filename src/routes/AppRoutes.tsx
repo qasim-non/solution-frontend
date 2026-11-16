@@ -16,6 +16,8 @@ import { RequestPage } from '../pages/customer/RequestPage';
 import { SuccessPage } from '../pages/customer/SuccessPage';
 import { ContactPage } from '../pages/customer/ContactPage';
 import { AccountPage } from '../pages/customer/AccountPage';
+import { DeveloperRegistrationPage } from '../pages/customer/developer-registration/DeveloperRegistrationPage';
+import { DeveloperRegistrationSuccessPage } from '../pages/customer/developer-registration/DeveloperRegistrationSuccessPage';
 
 // Admin Pages
 import { LoginPage } from '../pages/admin/LoginPage';
@@ -32,6 +34,11 @@ export const AppRoutes: React.FC = () => {
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/request" element={<RequestPage />} />
         <Route path="/success" element={<SuccessPage />} />
+        <Route path="/join-developer" element={<DeveloperRegistrationPage />} />
+        <Route
+          path="/join-developer/success"
+          element={<DeveloperRegistrationSuccessPage />}
+        />
         <Route path="/contact" element={<ContactPage />} />
         {/* /account intentionally disabled; route now unreachable */}
       </Route>
