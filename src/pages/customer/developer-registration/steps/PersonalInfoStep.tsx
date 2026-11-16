@@ -50,7 +50,6 @@ export const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
         label="الاسم الكامل"
         htmlFor="developer-full-name"
         required
-        hint="كما سيظهر في ملفك المهني"
         error={errors.full_name}
       >
         <div className="relative">
@@ -76,7 +75,6 @@ export const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
         label="رقم الواتساب للتواصل الرسمي"
         htmlFor="developer-mobile"
         required
-        hint="سنستخدمه للتواصل بشأن طلبك"
         error={errors.mobile}
       >
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-12">

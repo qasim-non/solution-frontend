@@ -12,15 +12,17 @@ import {
 } from 'lucide-react';
 import { developerApi } from '../../../api/developers';
 import { analytics } from '../../../lib/analytics';
-import type {
-  ApiValidationErrorResponse,
-  City,
-  DeveloperSpecialization,
-} from '../../../types/api';
+import type { ApiValidationErrorResponse } from '../../../types/api';
 import {
   DEVELOPER_RESULT_STORAGE_KEY,
   REGISTRATION_STEPS,
 } from './registrationConfig';
+import {
+  REGISTRATION_OPTIONS_TTL_MS,
+  readCachedRegistrationOptions,
+  readCachedRegistrationOptionsUpdatedAt,
+  writeCachedRegistrationOptions,
+} from './registrationOptionsCache';
 import {
   buildRegistrationPayload,
   createInitialRegistrationForm,
@@ -55,23 +57,22 @@ export const DeveloperRegistrationPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
-  const citiesQuery = useQuery({
-    queryKey: ['developer-cities'],
-    queryFn: developerApi.getCities,
-    select: (response) => response.data,
-    staleTime: 5 * 60 * 1000,
+  const optionsQuery = useQuery({
+    queryKey: ['developer-registration-options'],
+    queryFn: async () => {
+      const response = await developerApi.getRegistrationOptions();
+      writeCachedRegistrationOptions(response.data);
+      return response.data;
+    },
+    // Hydrate from the last successful response so revisiting the form renders
+    // instantly and avoids a second lookup round-trip.
+    initialData: readCachedRegistrationOptions,
+    initialDataUpdatedAt: readCachedRegistrationOptionsUpdatedAt,
+    staleTime: REGISTRATION_OPTIONS_TTL_MS,
   });
 
-  const specializationsQuery = useQuery({
-    queryKey: ['developer-specializations'],
-    queryFn: developerApi.getSpecializations,
-    select: (response) => response.data,
-    staleTime: 5 * 60 * 1000,
-  });
-
-  const cities: City[] = citiesQuery.data ?? [];
-  const specializations: DeveloperSpecialization[] =
-    specializationsQuery.data ?? [];
+  const cities = optionsQuery.data?.cities ?? [];
+  const specializations = optionsQuery.data?.specializations ?? [];
 
   const goToStep = (step: number) => {
     setCurrentStep(step);
@@ -285,10 +286,10 @@ export const DeveloperRegistrationPage: React.FC = () => {
                 form={form}
                 errors={errors}
                 cities={cities}
-                citiesLoading={citiesQuery.isLoading}
-                citiesError={citiesQuery.isError}
+                citiesLoading={optionsQuery.isLoading}
+                citiesError={optionsQuery.isError}
                 onRetryCities={() => {
-                  void citiesQuery.refetch();
+                  void optionsQuery.refetch();
                 }}
                 onPatch={patchForm}
               />
@@ -297,10 +298,10 @@ export const DeveloperRegistrationPage: React.FC = () => {
             {currentStep === 1 && (
               <SpecializationStep
                 specializations={specializations}
-                loading={specializationsQuery.isLoading}
-                error={specializationsQuery.isError}
+                loading={optionsQuery.isLoading}
+                error={optionsQuery.isError}
                 onRetry={() => {
-                  void specializationsQuery.refetch();
+                  void optionsQuery.refetch();
                 }}
                 form={form}
                 errors={errors}

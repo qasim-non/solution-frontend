@@ -40,7 +40,9 @@ export const FieldShell: React.FC<FieldShellProps> = ({
           )}
         </label>
         {hint && (
-          <span className="text-xs text-[#737686] font-medium">{hint}</span>
+          <span className="inline-flex items-center rounded-full border border-[#c3c6d7]/60 bg-[#f2f4f6] px-2.5 py-0.5 text-xs font-semibold text-[#434655]">
+            {hint}
+          </span>
         )}
       </div>
 

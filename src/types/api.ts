@@ -193,9 +193,13 @@ export interface DeveloperSpecialization {
   slug: string;
 }
 
-export type GetCitiesResponse = ApiSuccessResponse<City[]>;
-export type GetDeveloperSpecializationsResponse =
-  ApiSuccessResponse<DeveloperSpecialization[]>;
+export interface DeveloperRegistrationOptions {
+  cities: City[];
+  specializations: DeveloperSpecialization[];
+}
+
+export type GetDeveloperRegistrationOptionsResponse =
+  ApiSuccessResponse<DeveloperRegistrationOptions>;
 
 /**
  * The backend validates the exact Arabic label for this field, so the union

@@ -100,8 +100,8 @@ export const validateStep = (
 
     if (!digits) {
       errors.mobile = 'يرجى إدخال رقم الواتساب.';
-    } else if (digits.length < 6 || digits.length > 15) {
-      errors.mobile = 'يرجى إدخال رقم هاتف صحيح (6 إلى 15 رقماً).';
+    } else if (digits.length < 8 || digits.length > 12) {
+      errors.mobile = 'يرجى إدخال رقم هاتف صحيح (8 إلى 12 رقماً).';
     }
 
     if (!state.cityId) {

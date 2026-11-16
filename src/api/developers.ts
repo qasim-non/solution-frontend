@@ -2,8 +2,7 @@ import { apiClient } from './client';
 import {
   DeveloperRegistrationPayload,
   DeveloperRegistrationResponse,
-  GetCitiesResponse,
-  GetDeveloperSpecializationsResponse,
+  GetDeveloperRegistrationOptionsResponse,
 } from '../types/api';
 
 /**
@@ -14,17 +13,14 @@ import {
  * showing a false success state.
  */
 export const developerApi = {
-  getCities: async (): Promise<GetCitiesResponse> => {
-    const response = await apiClient.get<GetCitiesResponse>('/cities');
-    return response.data;
-  },
-
-  getSpecializations: async (): Promise<GetDeveloperSpecializationsResponse> => {
-    const response = await apiClient.get<GetDeveloperSpecializationsResponse>(
-      '/developer-specializations'
-    );
-    return response.data;
-  },
+  getRegistrationOptions:
+    async (): Promise<GetDeveloperRegistrationOptionsResponse> => {
+      const response =
+        await apiClient.get<GetDeveloperRegistrationOptionsResponse>(
+          '/developer-registration-options'
+        );
+      return response.data;
+    },
 
   /**
    * The registration endpoint accepts multipart/form-data because CV and
