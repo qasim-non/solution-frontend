@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import {
   AlertTriangle,
@@ -11,18 +10,13 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { developerApi } from '../../../api/developers';
+import { useDeveloperRegistrationOptions } from '../../../hooks/usePageOptions';
 import { analytics } from '../../../lib/analytics';
 import type { ApiValidationErrorResponse } from '../../../types/api';
 import {
   DEVELOPER_RESULT_STORAGE_KEY,
   REGISTRATION_STEPS,
 } from './registrationConfig';
-import {
-  REGISTRATION_OPTIONS_TTL_MS,
-  readCachedRegistrationOptions,
-  readCachedRegistrationOptionsUpdatedAt,
-  writeCachedRegistrationOptions,
-} from './registrationOptionsCache';
 import {
   buildRegistrationPayload,
   createInitialRegistrationForm,
@@ -57,19 +51,7 @@ export const DeveloperRegistrationPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
-  const optionsQuery = useQuery({
-    queryKey: ['developer-registration-options'],
-    queryFn: async () => {
-      const response = await developerApi.getRegistrationOptions();
-      writeCachedRegistrationOptions(response.data);
-      return response.data;
-    },
-    // Hydrate from the last successful response so revisiting the form renders
-    // instantly and avoids a second lookup round-trip.
-    initialData: readCachedRegistrationOptions,
-    initialDataUpdatedAt: readCachedRegistrationOptionsUpdatedAt,
-    staleTime: REGISTRATION_OPTIONS_TTL_MS,
-  });
+  const optionsQuery = useDeveloperRegistrationOptions();
 
   const cities = optionsQuery.data?.cities ?? [];
   const specializations = optionsQuery.data?.specializations ?? [];

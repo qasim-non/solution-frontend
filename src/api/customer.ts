@@ -1,8 +1,12 @@
 import { apiClient } from './client';
-import {
+import type {
   CreateProjectRequestPayload,
   CreateProjectRequestResponse,
+  GetCitiesResponse,
   GetContactInfoResponse,
+  GetDeveloperSpecializationsResponse,
+  GetPublicStatisticsResponse,
+  GetSystemTypesResponse,
   SendContactMessageRequest,
   SendContactMessageResponse,
 } from '../types/api';
@@ -20,19 +24,53 @@ export const customerApi = {
   createProjectRequest: async (
     payload: CreateProjectRequestPayload
   ): Promise<CreateProjectRequestResponse> => {
-    const response = await apiClient.post<CreateProjectRequestResponse>('/request', payload);
+    const response = await apiClient.post<CreateProjectRequestResponse>(
+      '/request',
+      payload
+    );
     return response.data;
   },
 
   sendContactMessage: async (
     payload: SendContactMessageRequest
   ): Promise<SendContactMessageResponse> => {
-    const response = await apiClient.post<SendContactMessageResponse>('/message', payload);
+    const response = await apiClient.post<SendContactMessageResponse>(
+      '/message',
+      payload
+    );
     return response.data;
   },
 
   getContactInfo: async (): Promise<GetContactInfoResponse> => {
     const response = await apiClient.get<GetContactInfoResponse>('/contact');
+    return response.data;
+  },
+
+  getSystemTypes: async (): Promise<GetSystemTypesResponse> => {
+    const response = await apiClient.get<GetSystemTypesResponse>(
+      '/system-types'
+    );
+    return response.data;
+  },
+
+  getCities: async (): Promise<GetCitiesResponse> => {
+    const response = await apiClient.get<GetCitiesResponse>('/cities');
+    return response.data;
+  },
+
+  getDeveloperSpecializations:
+    async (): Promise<GetDeveloperSpecializationsResponse> => {
+      const response =
+        await apiClient.get<GetDeveloperSpecializationsResponse>(
+          '/developer-specializations'
+        );
+      return response.data;
+    },
+
+  getPublicStatistics: async (): Promise<GetPublicStatisticsResponse> => {
+    const response = await apiClient.get<GetPublicStatisticsResponse>(
+      '/public/statistics'
+    );
     return response.data;
   },
 };

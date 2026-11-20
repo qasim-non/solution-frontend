@@ -1,327 +1,494 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  Eye,
+  Filter,
+  Pencil,
+  Plus,
+  Trash2,
+  Unlink,
+} from 'lucide-react';
 import { adminApi } from '../../api/admin';
+import { AdminCard } from '../../components/admin/AdminCard';
 import { AdminHeader } from '../../components/admin/AdminHeader';
+import { EmptyState, ErrorState, LoadingState } from '../../components/admin/AsyncState';
+import { PageOptionsRefreshButton } from '../../components/admin/PageOptionsRefreshButton';
+import { Pagination } from '../../components/admin/Pagination';
+import { RequestFormModal } from '../../components/admin/RequestFormModal';
+import { RequestStatusBadge } from '../../components/admin/StatusBadge';
 import { SocialMediaModal } from '../../components/admin/SocialMediaModal';
-import { ProjectRequest, SocialMediaAccountItem, SystemType } from '../../types/api';
-import { Search, Filter, Eye, CheckCircle2, RotateCcw, Calendar, MessageSquare, Phone } from 'lucide-react';
+import { useRequestPageOptions } from '../../hooks/usePageOptions';
+import {
+  getApiErrorMessage,
+  isConflictError,
+} from '../../lib/apiErrors';
+import { queryKeys } from '../../lib/queryKeys';
+import type {
+  CreateProjectRequestPayload,
+  ProjectRequest,
+  SocialMediaAccountItem,
+  UpdateProjectRequestPayload,
+} from '../../types/api';
+
+interface Filters {
+  search: string;
+  system_type: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+}
+
+const initialFilters: Filters = {
+  search: '',
+  system_type: '',
+  status: '',
+  start_date: '',
+  end_date: '',
+};
+
+const statusLabels: Record<string, string> = {
+  pending: 'قيد الانتظار',
+  reviewed: 'تمت المراجعة',
+  completed: 'مكتمل',
+};
+
+const systemTypeLabels: Record<string, string> = {
+  Web: 'موقع إلكتروني',
+  Website: 'موقع إلكتروني',
+  'Mobile App': 'تطبيق جوال',
+  'Mobile Application': 'تطبيق جوال',
+  'Desktop Application': 'تطبيق مكتبي',
+};
+
+const actionButton =
+  'inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold transition-colors';
 
 export const RequestsPage: React.FC = () => {
-  const [requests, setRequests] = useState<ProjectRequest[]>([]);
-  const [systemTypes, setSystemTypes] = useState<SystemType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const optionsQuery = useRequestPageOptions();
 
-  // Filter state
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [filters, setFilters] = useState<Filters>(initialFilters);
+  const [appliedFilters, setAppliedFilters] = useState<Filters>(initialFilters);
+  const [page, setPage] = useState(1);
+  const [filterError, setFilterError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
-  // Social Media Modal state
-  const [isSocialModalOpen, setIsSocialModalOpen] = useState(false);
-  const [selectedRequestName, setSelectedRequestName] = useState('');
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [formMode, setFormMode] = useState<'create' | 'edit'>('create');
+  const [selectedRequest, setSelectedRequest] = useState<ProjectRequest | null>(null);
+
+  const [isSocialOpen, setIsSocialOpen] = useState(false);
   const [socialAccounts, setSocialAccounts] = useState<SocialMediaAccountItem[]>([]);
-  const [loadingAccounts, setLoadingAccounts] = useState(false);
 
-  const fetchRequests = useCallback(async () => {
-    setIsLoading(true);
-    setErrorMsg(null);
-
-    // The API requires both dates together (required_with), so only send a
-    // range when both are filled in — otherwise it returns 422 and the table
-    // silently looks empty.
-    const hasDateRange = Boolean(startDate && endDate);
-
-    try {
-      const res = await adminApi.getRequests({
-        search: searchTerm.trim() || undefined,
-        system_type: selectedType !== 'all' ? Number(selectedType) : undefined,
-        status: selectedStatus !== 'all' ? selectedStatus : undefined,
-        start_date: hasDateRange ? startDate : undefined,
-        end_date: hasDateRange ? endDate : undefined,
-      });
-      setRequests(res.data || []);
-    } catch {
-      setRequests([]);
-      setErrorMsg('تعذر تحميل الطلبات. قد تكون الجلسة منتهية — يرجى تحديث الصفحة وتسجيل الدخول من جديد.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [searchTerm, selectedType, selectedStatus, startDate, endDate]);
+  const shouldOpenCreate = searchParams.get('create') === '1';
 
   useEffect(() => {
-    // Initial fetch of requests and system categories
-    adminApi
-      .getSystemTypes()
-      .then((res) => setSystemTypes(res.data || []))
-      .catch(() => setSystemTypes([]));
-    fetchRequests();
-  }, [fetchRequests]);
-
-  const handleFilterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetchRequests();
-  };
-
-  const handleViewSocialAccounts = async (req: ProjectRequest) => {
-    setSelectedRequestName(req.project_name);
-    setIsSocialModalOpen(true);
-    setLoadingAccounts(true);
-
-    try {
-      const res = await adminApi.getSocialMediaAccounts(req.id);
-      setSocialAccounts(res.data || []);
-    } catch {
-      setSocialAccounts([]);
-    } finally {
-      setLoadingAccounts(false);
+    if (!shouldOpenCreate) {
+      return;
     }
+    setFormMode('create');
+    setSelectedRequest(null);
+    setIsFormOpen(true);
+    setSearchParams({}, { replace: true });
+  }, [shouldOpenCreate, setSearchParams]);
+
+  const requestParams = useMemo(
+    () => ({
+      search: appliedFilters.search.trim() || undefined,
+      system_type: appliedFilters.system_type
+        ? Number(appliedFilters.system_type)
+        : undefined,
+      status: appliedFilters.status || undefined,
+      start_date: appliedFilters.start_date || undefined,
+      end_date: appliedFilters.end_date || undefined,
+      page,
+      per_page: 20,
+    }),
+    [appliedFilters, page]
+  );
+
+  const requestsQuery = useQuery({
+    queryKey: queryKeys.admin.requests(requestParams),
+    queryFn: async () => {
+      const response = await adminApi.getRequests(requestParams);
+      return response;
+    },
+  });
+
+  const requests = requestsQuery.data?.data ?? [];
+  const meta = requestsQuery.data?.meta;
+
+  const refreshRequests = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.requestsList }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.dashboard }),
+    ]);
   };
 
-  const handleComplete = async (id: number) => {
-    try {
-      await adminApi.completeRequest(id);
-      setRequests((prev) =>
-        prev.map((r) => (r.id === id ? { ...r, status: 'completed' } : r))
+  const saveMutation = useMutation({
+    mutationFn: async (
+      payload: CreateProjectRequestPayload | UpdateProjectRequestPayload
+    ) => {
+      if (formMode === 'create') {
+        await adminApi.createRequest(payload as CreateProjectRequestPayload);
+      } else if (selectedRequest) {
+        await adminApi.updateRequest(
+          selectedRequest.id,
+          payload as UpdateProjectRequestPayload
+        );
+      }
+    },
+    onSuccess: () => {
+      void refreshRequests();
+    },
+  });
+
+  const statusMutation = useMutation({
+    mutationFn: ({ id, status }: { id: number; status: string }) =>
+      adminApi.updateRequestStatus(id, status),
+    onSuccess: async (_data, variables) => {
+      setActionError(null);
+      await refreshRequests();
+      // The backend returns 409 for a repeated status. If another admin changed
+      // the row first, the refetch above is the source of truth.
+      void variables;
+    },
+    onError: (error) => {
+      setActionError(
+        isConflictError(error)
+          ? 'هذه هي الحالة الحالية للطلب، تم تحديث القائمة.'
+          : getApiErrorMessage(error, 'تعذّر تحديث حالة الطلب.')
       );
-    } catch {
-      setErrorMsg('تعذر تحديث حالة الطلب. يرجى المحاولة مرة أخرى.');
+      void refreshRequests();
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => adminApi.deleteRequest(id),
+    onSuccess: () => {
+      setActionError(null);
+      if (requests.length === 1 && page > 1) {
+        setPage((previous) => previous - 1);
+      }
+      void refreshRequests();
+    },
+    onError: (error) => {
+      setActionError(getApiErrorMessage(error, 'تعذّر حذف الطلب.'));
+    },
+  });
+
+  const clearSocialMutation = useMutation({
+    mutationFn: (id: number) => adminApi.updateRequest(id, { social_media: {} }),
+    onSuccess: () => {
+      setActionError(null);
+      void refreshRequests();
+    },
+    onError: (error) => {
+      setActionError(getApiErrorMessage(error, 'تعذّر حذف روابط التواصل.'));
+    },
+  });
+
+  const applyFilters = (event: React.FormEvent) => {
+    event.preventDefault();
+    setFilterError(null);
+
+    if (Boolean(filters.start_date) !== Boolean(filters.end_date)) {
+      setFilterError('أدخل تاريخ البدء وتاريخ الانتهاء معاً.');
+      return;
     }
+
+    setAppliedFilters(filters);
+    setPage(1);
   };
 
-  const handleRevert = async (id: number) => {
-    try {
-      await adminApi.revertRequest(id);
-      setRequests((prev) =>
-        prev.map((r) => (r.id === id ? { ...r, status: 'pending' } : r))
-      );
-    } catch {
-      setErrorMsg('تعذر تحديث حالة الطلب. يرجى المحاولة مرة أخرى.');
-    }
+  const openCreate = () => {
+    setFormMode('create');
+    setSelectedRequest(null);
+    setIsFormOpen(true);
   };
+
+  const openEdit = (request: ProjectRequest) => {
+    setFormMode('edit');
+    setSelectedRequest(request);
+    setIsFormOpen(true);
+  };
+
+  const openSocial = (request: ProjectRequest) => {
+    setSelectedRequest(request);
+    setSocialAccounts(request.social_media_accounts ?? []);
+    setIsSocialOpen(true);
+  };
+
+  const statuses = optionsQuery.data?.statuses ?? [];
+  const systemTypes = optionsQuery.data?.system_types ?? [];
 
   return (
-    <div className="rtl space-y-8">
+    <div className="space-y-6 rtl">
       <AdminHeader
         title="طلبات المشاريع"
         subtitle="إدارة ومتابعة كافة طلبات البرمجيات والتطبيقات المقدمة من العملاء."
+        actions={
+          <button
+            type="button"
+            onClick={openCreate}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-bold text-on-primary transition-colors hover:bg-primary-container"
+          >
+            <Plus className="h-4 w-4" />
+            طلب جديد
+          </button>
+        }
       />
 
-      {/* Filter Section */}
-      <section className="bg-[#ffffff] border border-[#c3c6d7]/40 rounded-2xl p-6 shadow-xs">
-        <form onSubmit={handleFilterSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Search by project name */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-[#434655]" htmlFor="search">
-                اسم المشروع
-              </label>
-              <div className="relative">
-                <Search className="w-4 h-4 absolute right-3.5 top-3.5 text-[#737686]" />
-                <input
-                  id="search"
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="بحث باسم المشروع..."
-                  className="w-full pl-3 pr-10 py-2.5 bg-[#f7f9fb] border border-[#c3c6d7]/60 rounded-xl text-sm text-[#191c1e] outline-none focus:border-[#004ac6]"
-                />
-              </div>
-            </div>
+      {actionError && (
+        <div className="rounded-xl bg-error-container px-4 py-3 text-sm font-semibold text-on-error-container">
+          {actionError}
+        </div>
+      )}
 
-            {/* System Type Filter */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-[#434655]" htmlFor="type">
-                نوع النظام
-              </label>
+      <AdminCard title="البحث والفلترة" bodyClassName="p-5">
+        <form onSubmit={applyFilters} className="space-y-4">
+          {filterError && (
+            <p className="rounded-lg bg-error-container px-3 py-2 text-xs font-bold text-on-error-container">
+              {filterError}
+            </p>
+          )}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-bold text-on-surface-variant">اسم المشروع</span>
+              <input
+                type="text"
+                value={filters.search}
+                maxLength={50}
+                onChange={(event) =>
+                  setFilters((previous) => ({ ...previous, search: event.target.value }))
+                }
+                placeholder="بحث باسم المشروع..."
+                className="rounded-xl border border-outline-variant/70 bg-surface-container-low px-3 py-2.5 text-sm outline-none focus:border-primary"
+              />
+            </label>
+
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-bold text-on-surface-variant">نوع النظام</span>
               <select
-                id="type"
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="w-full px-3 py-2.5 bg-[#f7f9fb] border border-[#c3c6d7]/60 rounded-xl text-sm text-[#191c1e] outline-none focus:border-[#004ac6]"
+                value={filters.system_type}
+                onChange={(event) =>
+                  setFilters((previous) => ({
+                    ...previous,
+                    system_type: event.target.value,
+                  }))
+                }
+                className="rounded-xl border border-outline-variant/70 bg-surface-container-low px-3 py-2.5 text-sm outline-none focus:border-primary"
               >
-                <option value="all">جميع الأنظمة</option>
-                {systemTypes.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name}
+                <option value="">جميع الأنظمة</option>
+                {systemTypes.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.name}
                   </option>
                 ))}
               </select>
-            </div>
+            </label>
 
-            {/* Status Filter */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-[#434655]" htmlFor="status">
-                الحالة
-              </label>
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-bold text-on-surface-variant">الحالة</span>
               <select
-                id="status"
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="w-full px-3 py-2.5 bg-[#f7f9fb] border border-[#c3c6d7]/60 rounded-xl text-sm text-[#191c1e] outline-none focus:border-[#004ac6]"
+                value={filters.status}
+                onChange={(event) =>
+                  setFilters((previous) => ({ ...previous, status: event.target.value }))
+                }
+                className="rounded-xl border border-outline-variant/70 bg-surface-container-low px-3 py-2.5 text-sm outline-none focus:border-primary"
               >
-                <option value="all">جميع الحالات</option>
-                <option value="pending">قيد الانتظار</option>
-                <option value="completed">تمت المراجعة</option>
+                <option value="">جميع الحالات</option>
+                {statuses.map((status) => (
+                  <option key={status} value={status}>
+                    {statusLabels[status] ?? status}
+                  </option>
+                ))}
               </select>
-            </div>
+            </label>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-[#434655]" htmlFor="start-date">
-                تاريخ البدء
-              </label>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-bold text-on-surface-variant">من تاريخ</span>
               <input
-                id="start-date"
                 type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2.5 bg-[#f7f9fb] border border-[#c3c6d7]/60 rounded-xl text-sm text-[#191c1e] outline-none focus:border-[#004ac6]"
+                value={filters.start_date}
+                onChange={(event) =>
+                  setFilters((previous) => ({
+                    ...previous,
+                    start_date: event.target.value,
+                  }))
+                }
+                className="rounded-xl border border-outline-variant/70 bg-surface-container-low px-3 py-2.5 text-sm outline-none focus:border-primary"
               />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-[#434655]" htmlFor="end-date">
-                تاريخ الانتهاء
-              </label>
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-bold text-on-surface-variant">إلى تاريخ</span>
               <input
-                id="end-date"
                 type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2.5 bg-[#f7f9fb] border border-[#c3c6d7]/60 rounded-xl text-sm text-[#191c1e] outline-none focus:border-[#004ac6]"
+                value={filters.end_date}
+                onChange={(event) =>
+                  setFilters((previous) => ({
+                    ...previous,
+                    end_date: event.target.value,
+                  }))
+                }
+                className="rounded-xl border border-outline-variant/70 bg-surface-container-low px-3 py-2.5 text-sm outline-none focus:border-primary"
               />
-            </div>
-
-            <div>
+            </label>
+            <div className="flex items-end gap-2">
               <button
                 type="submit"
-                className="w-full bg-[#004ac6] text-white font-bold py-2.5 px-4 rounded-xl text-sm hover:bg-[#2563eb] transition-colors flex items-center justify-center gap-2"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-on-primary transition-colors hover:bg-primary-container"
               >
-                <Filter className="w-4 h-4" />
-                <span>تطبيق الفلتر</span>
+                <Filter className="h-4 w-4" />
+                تطبيق الفلتر
               </button>
+              <PageOptionsRefreshButton label="تحديث الخيارات" />
             </div>
           </div>
         </form>
-      </section>
+      </AdminCard>
 
-      {/* Requests Table */}
-      <section className="bg-[#ffffff] border border-[#c3c6d7]/40 rounded-2xl shadow-xs overflow-hidden">
-        {errorMsg ? (
-          <div className="py-12 text-center text-[#ba1a1a] text-sm font-semibold px-6">
-            {errorMsg}
+      <AdminCard
+        title="قائمة الطلبات"
+        subtitle={meta ? `${meta.total} طلب إجمالاً` : undefined}
+        bodyClassName="p-0"
+      >
+        {optionsQuery.isError && (
+          <div className="border-b border-error-container bg-error-container/40 px-5 py-3 text-xs font-semibold text-on-error-container">
+            تعذّر تحميل خيارات الفلترة. يمكنك تحديثها من الزر أعلاه.
           </div>
-        ) : isLoading ? (
-          <div className="py-12 text-center text-[#004ac6]">
-            <div className="w-8 h-8 border-4 border-[#004ac6] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-            <p className="text-sm font-semibold">جاري تحميل الطلبات...</p>
-          </div>
+        )}
+
+        {requestsQuery.isLoading ? (
+          <LoadingState label="جاري تحميل الطلبات..." />
+        ) : requestsQuery.isError ? (
+          <ErrorState
+            message={getApiErrorMessage(
+              requestsQuery.error,
+              'تعذّر تحميل الطلبات. قد تكون الجلسة منتهية.'
+            )}
+            onRetry={() => void requestsQuery.refetch()}
+          />
         ) : requests.length === 0 ? (
-          <div className="py-12 text-center text-[#434655] text-sm">
-            لا توجد طلبات تطابق خيارات الفلترة المحددة.
-          </div>
+          <EmptyState
+            title="لا توجد طلبات مطابقة"
+            description="جرّب تعديل خيارات الفلترة أو أضف طلباً جديداً."
+          />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-right text-sm">
-              <thead className="bg-[#f2f4f6] text-[#434655] border-b border-[#c3c6d7]/40 font-bold">
+              <thead className="border-b border-outline-variant/40 bg-surface-container-low text-xs font-bold text-on-surface-variant">
                 <tr>
                   <th className="p-4">المعرف</th>
                   <th className="p-4">اسم المشروع</th>
-                  <th className="p-4">الوصف</th>
-                  <th className="p-4">رقم الواتساب</th>
+                  <th className="p-4">رقم الهاتف</th>
                   <th className="p-4">نوع النظام</th>
-                  <th className="p-4">حسابات التواصل</th>
-                  <th className="p-4">التاريخ</th>
                   <th className="p-4">الحالة</th>
-                  <th className="p-4">الإجراء الإداري</th>
+                  <th className="p-4">التاريخ</th>
+                  <th className="p-4">الإجراءات</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#c3c6d7]/30">
-                {requests.map((req) => (
-                  <tr key={req.id} className="hover:bg-[#f7f9fb] transition-colors">
-                    <td className="p-4 font-mono font-bold text-[#004ac6]">#{req.id}</td>
-                    <td className="p-4 font-bold text-[#191c1e]">{req.project_name}</td>
-                    <td className="p-4 text-[#434655] max-w-[240px]">
-                      <span className="line-clamp-2">{req.description || '—'}</span>
+              <tbody className="divide-y divide-outline-variant/30">
+                {requests.map((request) => (
+                  <tr key={request.id} className="transition-colors hover:bg-surface-container-low/60">
+                    <td className="p-4 font-mono font-bold text-primary">#{request.id}</td>
+                    <td className="p-4">
+                      <p className="font-bold text-on-surface">{request.project_name}</p>
+                      <p className="mt-0.5 max-w-[260px] truncate text-xs text-on-surface-variant">
+                        {request.description || '—'}
+                      </p>
                     </td>
-                    <td className="p-4 text-[#434655] font-mono" dir="ltr">
-                      {req.mobile || '+966 50 123 4567'}
+                    <td className="p-4 font-mono text-xs text-on-surface-variant" dir="ltr">
+                      {request.mobile ?? '—'}
                     </td>
                     <td className="p-4">
-                      <div className="flex gap-2 flex-wrap justify-end">
-                        {(req.system_types || []).map((st, i) => {
-                          const name = st.name || '';
-                          let label = name;
-                          let styleClass = 'bg-[#e0e3e5] text-[#434655]';
-
-                          if (name === 'Web') {
-                            label = 'موقع إلكتروني';
-                            styleClass = 'bg-[#dbe1ff] text-[#004ac6]';
-                          } else if (name === 'Mobile App') {
-                            label = 'تطبيق جوال';
-                            styleClass = 'bg-[#f3e8ff] text-[#6b21a8]';
-                          } else if (name === 'Desktop Application') {
-                            label = 'تطبيق مكتبي';
-                            styleClass = 'bg-[#dff6e9] text-[#047857]';
-                          }
-
+                      <div className="flex flex-wrap justify-end gap-1.5">
+                        {(request.system_types ?? []).map((type, index) => {
+                          const name = type.name || '—';
                           return (
                             <span
-                              key={i}
-                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${styleClass}`}
+                              key={`${name}-${index}`}
+                              className="rounded-full bg-surface-container px-2.5 py-1 text-[11px] font-bold text-on-surface-variant"
                             >
-                              {label}
+                              {systemTypeLabels[name] ?? name}
                             </span>
                           );
                         })}
                       </div>
                     </td>
                     <td className="p-4">
-                      <button
-                        onClick={() => handleViewSocialAccounts(req)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#004ac6]/10 text-[#004ac6] hover:bg-[#004ac6] hover:text-white transition-colors rounded-lg text-xs font-bold"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                        <span>عرض الحسابات</span>
-                      </button>
+                      <RequestStatusBadge status={request.status} />
                     </td>
-                    <td className="p-4 text-[#434655]">
-                      {new Date(req.created_at).toLocaleDateString('ar-SA')}
+                    <td className="p-4 text-xs text-on-surface-variant">
+                      {new Date(request.created_at).toLocaleDateString('ar-SA')}
                     </td>
                     <td className="p-4">
-                      <span
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
-                          req.status === 'completed'
-                            ? 'bg-[#dbe1ff] text-[#004ac6]'
-                            : 'bg-[#e0e3e5] text-[#434655]'
-                        }`}
-                      >
-                        {req.status === 'completed' ? 'تمت المراجعة' : 'قيد الانتظار'}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      {req.status === 'completed' ? (
+                      <div className="flex flex-wrap justify-end gap-1.5">
                         <button
-                          onClick={() => handleRevert(req.id)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#eceef0] text-[#434655] hover:bg-[#e0e3e5] transition-colors rounded-lg text-xs font-semibold"
-                          title="إعادة إلى قيد الانتظار"
+                          type="button"
+                          onClick={() => openSocial(request)}
+                          className={`${actionButton} bg-primary-fixed text-on-primary-fixed-variant hover:opacity-80`}
+                          title="عرض حسابات التواصل"
                         >
-                          <RotateCcw className="w-3.5 h-3.5" />
-                          <span>إعادة للانتظار</span>
+                          <Eye className="h-3.5 w-3.5" />
+                          حسابات
                         </button>
-                      ) : (
                         <button
-                          onClick={() => handleComplete(req.id)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#004ac6] text-white hover:bg-[#2563eb] transition-colors rounded-lg text-xs font-semibold shadow-xs"
-                          title="تحديد كـ تمت المراجعة"
+                          type="button"
+                          onClick={() => openEdit(request)}
+                          className={`${actionButton} bg-surface-container text-on-surface-variant hover:bg-surface-container-high`}
                         >
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>تمت المراجعة</span>
+                          <Pencil className="h-3.5 w-3.5" />
+                          تعديل
                         </button>
-                      )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (
+                              window.confirm('هل تريد حذف روابط التواصل لهذا الطلب؟')
+                            ) {
+                              clearSocialMutation.mutate(request.id);
+                            }
+                          }}
+                          className={`${actionButton} bg-surface-container text-on-surface-variant hover:bg-surface-container-high`}
+                        >
+                          <Unlink className="h-3.5 w-3.5" />
+                          مسح الروابط
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm('هل تريد حذف هذا الطلب نهائياً؟')) {
+                              deleteMutation.mutate(request.id);
+                            }
+                          }}
+                          className={`${actionButton} bg-error-container text-on-error-container hover:opacity-80`}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                          حذف
+                        </button>
+                      </div>
+                      <div className="mt-2 flex flex-wrap justify-end gap-1.5">
+                        {statuses
+                          .filter((status) => status !== request.status)
+                          .map((status) => (
+                            <button
+                              key={status}
+                              type="button"
+                              disabled={statusMutation.isPending}
+                              onClick={() =>
+                                statusMutation.mutate({ id: request.id, status })
+                              }
+                              className="rounded-full border border-outline-variant/70 px-2.5 py-1 text-[11px] font-bold text-on-surface-variant transition-colors hover:bg-surface-container disabled:opacity-50"
+                            >
+                              نقل إلى {statusLabels[status] ?? status}
+                            </button>
+                          ))}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -329,15 +496,34 @@ export const RequestsPage: React.FC = () => {
             </table>
           </div>
         )}
-      </section>
 
-      {/* Social Media Modal */}
+        {meta && (
+          <Pagination
+            currentPage={meta.current_page}
+            lastPage={meta.last_page}
+            total={meta.total}
+            perPage={meta.per_page}
+            onPageChange={setPage}
+            isLoading={requestsQuery.isFetching}
+          />
+        )}
+      </AdminCard>
+
+      <RequestFormModal
+        isOpen={isFormOpen}
+        mode={formMode}
+        request={selectedRequest}
+        systemTypes={systemTypes}
+        onSubmit={(payload) => saveMutation.mutateAsync(payload)}
+        onClose={() => setIsFormOpen(false)}
+      />
+
       <SocialMediaModal
-        isOpen={isSocialModalOpen}
-        onClose={() => setIsSocialModalOpen(false)}
-        projectName={selectedRequestName}
+        isOpen={isSocialOpen}
+        onClose={() => setIsSocialOpen(false)}
+        projectName={selectedRequest?.project_name ?? ''}
         accounts={socialAccounts}
-        isLoading={loadingAccounts}
+        isLoading={false}
       />
     </div>
   );

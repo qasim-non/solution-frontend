@@ -11,6 +11,7 @@ import { ProtectedRoute } from '../components/common/ProtectedRoute';
 
 // Public / Customer Pages
 import { LandingPage } from '../pages/customer/LandingPage';
+import { DeveloperNetworkPage } from '../pages/customer/DeveloperNetworkPage';
 import { ServicesPage } from '../pages/customer/ServicesPage';
 import { RequestPage } from '../pages/customer/RequestPage';
 import { SuccessPage } from '../pages/customer/SuccessPage';
@@ -23,7 +24,12 @@ import { DeveloperRegistrationSuccessPage } from '../pages/customer/developer-re
 import { LoginPage } from '../pages/admin/LoginPage';
 import { DashboardPage } from '../pages/admin/DashboardPage';
 import { RequestsPage } from '../pages/admin/RequestsPage';
+import { DevelopersPage } from '../pages/admin/DevelopersPage';
+import { DeveloperDetailsPage } from '../pages/admin/DeveloperDetailsPage';
 import { MessagesPage } from '../pages/admin/MessagesPage';
+import { NotificationsPage } from '../pages/admin/NotificationsPage';
+import { AuditLogsPage } from '../pages/admin/AuditLogsPage';
+import { AccountSettingsPage } from '../pages/admin/AccountSettingsPage';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -34,6 +40,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/request" element={<RequestPage />} />
         <Route path="/success" element={<SuccessPage />} />
+        <Route path="/developer-network" element={<DeveloperNetworkPage />} />
         <Route path="/join-developer" element={<DeveloperRegistrationPage />} />
         <Route
           path="/join-developer/success"
@@ -53,8 +60,16 @@ export const AppRoutes: React.FC = () => {
         <Route element={<AdminLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/dashboard/requests" element={<RequestsPage />} />
+          <Route path="/dashboard/developers" element={<DevelopersPage />} />
+          <Route
+            path="/dashboard/developers/:id"
+            element={<DeveloperDetailsPage />}
+          />
           <Route path="/dashboard/contact" element={<MessagesPage />} />
           <Route path="/dashboard/messages" element={<MessagesPage />} />
+          <Route path="/dashboard/notifications" element={<NotificationsPage />} />
+          <Route path="/dashboard/audit-logs" element={<AuditLogsPage />} />
+          <Route path="/dashboard/account" element={<AccountSettingsPage />} />
         </Route>
       </Route>
 

@@ -7,7 +7,9 @@ export const TopNavBar: React.FC = () => {
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
-  const isDeveloperRoute = location.pathname.startsWith('/join-developer');
+  const isDeveloperRoute =
+    location.pathname.startsWith('/developer-network') ||
+    location.pathname.startsWith('/join-developer');
 
   return (
     <header className="w-full top-0 sticky bg-[#f7f9fb] dark:bg-[#191c1e] border-b border-[#c3c6d7]/40 z-50 transition-all duration-200">
@@ -45,14 +47,17 @@ export const TopNavBar: React.FC = () => {
             خدماتنا
           </Link>
           <Link
-            to="/join-developer"
-            className={`transition-all duration-200 cursor-pointer active:scale-95 ${
+            to="/developer-network"
+            className={`flex items-center gap-2 transition-all duration-200 cursor-pointer active:scale-95 ${
               isDeveloperRoute
                 ? 'text-[#004ac6] font-bold border-b-2 border-[#004ac6] pb-1'
                 : 'text-[#434655] hover:text-[#004ac6]'
             }`}
           >
-            انضم كمطور
+            شبكة المطورين
+            <span className="rounded-full bg-[#dbe1ff] px-2 py-0.5 text-[10px] font-bold text-[#004ac6]">
+              جديد
+            </span>
           </Link>
           <Link
             to="/contact"
@@ -105,11 +110,14 @@ export const TopNavBar: React.FC = () => {
             خدماتنا
           </Link>
           <Link
-            to="/join-developer"
+            to="/developer-network"
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-base font-semibold text-[#191c1e] hover:text-[#004ac6]"
+            className="flex items-center gap-2 py-2 text-base font-semibold text-[#191c1e] hover:text-[#004ac6]"
           >
-            انضم كمطور
+            شبكة المطورين
+            <span className="rounded-full bg-[#dbe1ff] px-2 py-0.5 text-[10px] font-bold text-[#004ac6]">
+              جديد
+            </span>
           </Link>
           <Link
             to="/contact"

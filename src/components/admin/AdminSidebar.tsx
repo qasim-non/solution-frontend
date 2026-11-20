@@ -1,9 +1,30 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, FileText, Mail, Plus, LogOut, Code2 } from 'lucide-react';
+import {
+  Bell,
+  Code2,
+  FileText,
+  LayoutDashboard,
+  LogOut,
+  Mail,
+  Plus,
+  ScrollText,
+  Settings,
+  Users,
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { PushNotificationToggle } from '../common/PushNotificationToggle';
 import { unregisterPushNotifications } from '../../lib/notifications';
+
+const navItems = [
+  { path: '/dashboard', label: 'لوحة التحكم', icon: LayoutDashboard, end: true },
+  { path: '/dashboard/requests', label: 'طلبات المشاريع', icon: FileText, end: false },
+  { path: '/dashboard/developers', label: 'المطورون', icon: Users, end: false },
+  { path: '/dashboard/messages', label: 'الرسائل', icon: Mail, end: false },
+  { path: '/dashboard/notifications', label: 'الإشعارات', icon: Bell, end: false },
+  { path: '/dashboard/audit-logs', label: 'سجل النشاطات', icon: ScrollText, end: false },
+  { path: '/dashboard/account', label: 'إعدادات الحساب', icon: Settings, end: false },
+];
 
 export const AdminSidebar: React.FC = () => {
   const { logout } = useAuth();
@@ -25,24 +46,16 @@ export const AdminSidebar: React.FC = () => {
     }
   };
 
-  const navItems = [
-    { path: '/dashboard', label: 'لوحة التحكم', icon: LayoutDashboard },
-    { path: '/dashboard/requests', label: 'طلبات المشاريع', icon: FileText },
-    { path: '/dashboard/contact', label: 'الرسائل', icon: Mail },
-  ];
-
   return (
-    <aside className="hidden md:flex h-full w-64 fixed right-0 top-0 border-l border-[#c3c6d7]/30 shadow-sm flex-col py-6 px-4 rtl bg-[#f2f4f6] dark:bg-[#2d3133] z-40">
+    <aside className="fixed right-0 top-0 z-40 hidden h-full w-64 flex-col border-l border-outline-variant/50 bg-surface-container-low px-4 py-6 rtl md:flex">
       <div className="mb-8 px-2">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-8 h-8 rounded-lg bg-[#004ac6] flex items-center justify-center text-white font-bold text-sm">
-            <Code2 className="w-5 h-5" />
+        <div className="mb-2 flex items-center gap-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-on-primary shadow-sm">
+            <Code2 className="h-5 w-5" />
           </div>
-          <h1 className="font-bold text-xl text-[#004ac6] dark:text-[#b4c5ff]">
-           حلول برمجية
-          </h1>
+          <h1 className="text-lg font-bold text-primary">حلول برمجية</h1>
         </div>
-        <p className="text-xs text-[#434655] dark:text-[#e0e3e5]">بوابة الإدارة والعمليات</p>
+        <p className="text-xs text-on-surface-variant">بوابة الإدارة والعمليات</p>
       </div>
 
       <nav className="flex-1 space-y-1.5">
@@ -52,38 +65,40 @@ export const AdminSidebar: React.FC = () => {
             <NavLink
               key={item.path}
               to={item.path}
-              end={item.path === '/dashboard'}
+              end={item.end}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.98] ${
+                `flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all active:scale-[0.98] ${
                   isActive
-                    ? 'bg-[#645efb] text-white shadow-sm'
-                    : 'text-[#434655] dark:text-[#e0e3e5] hover:bg-[#e0e3e5] dark:hover:bg-[#4d556b]'
+                    ? 'bg-primary text-on-primary shadow-sm'
+                    : 'text-on-surface-variant hover:bg-surface-container'
                 }`
               }
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="h-[18px] w-[18px]" />
               <span>{item.label}</span>
             </NavLink>
           );
         })}
       </nav>
 
-      <div className="mt-auto pt-4 border-t border-[#c3c6d7]/30 space-y-2">
+      <div className="mt-auto space-y-2 border-t border-outline-variant/50 pt-4">
         <PushNotificationToggle showLabel />
 
         <button
-          onClick={() => navigate('/request')}
-          className="w-full bg-[#004ac6] text-white py-2.5 px-4 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[#2563eb] transition-colors shadow-sm"
+          type="button"
+          onClick={() => navigate('/dashboard/requests?create=1')}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-on-primary shadow-sm transition-colors hover:bg-primary-container"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="h-4 w-4" />
           <span>إضافة طلب جديد</span>
         </button>
 
         <button
+          type="button"
           onClick={() => void handleLogout()}
-          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-[#ba1a1a] hover:bg-[#ffdad6] rounded-xl transition-colors"
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-semibold text-error transition-colors hover:bg-error-container"
         >
-          <LogOut className="w-5 h-5" />
+          <LogOut className="h-[18px] w-[18px]" />
           <span>تسجيل الخروج</span>
         </button>
       </div>

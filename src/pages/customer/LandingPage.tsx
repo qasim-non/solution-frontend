@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Rocket, Palette, Zap, Award, Gauge, Code2, Headset, ArrowLeft } from 'lucide-react';
+import { PublicStatisticsBar } from '../../components/common/PublicStatisticsBar';
 
 export const LandingPage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -125,6 +126,8 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
+      <PublicStatisticsBar className="relative z-10 mx-auto -mt-2 w-full max-w-[1000px] px-6" />
+
       {/* Features Section */}
       <section className="py-20 bg-[#ffffff]">
         <div className="max-w-[1200px] mx-auto px-6">
@@ -205,10 +208,10 @@ export const LandingPage: React.FC = () => {
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <Link
-              to="/join-developer"
+              to="/developer-network"
               className="bg-white text-[#004ac6] text-lg font-semibold px-8 py-4 rounded-xl border border-[#004ac6]/30 hover:bg-[#f2f4f6] transition-all active:scale-95 flex items-center gap-3"
             >
-              <span>انضم كمطور</span>
+              <span>انضم لشبكة المطورين</span>
               <ArrowLeft className="w-5 h-5" />
             </Link>
           </div>
