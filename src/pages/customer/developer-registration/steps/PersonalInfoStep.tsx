@@ -153,7 +153,7 @@ export const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
 
         {citiesError && (
           <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-[#ffdad6] px-3.5 py-2.5 text-xs font-semibold text-[#ba1a1a]">
-            <span>تعذّر تحميل قائمة المدن.</span>
+            <span>تعذّر تحميل قائمة المدن</span>
             <button
               type="button"
               onClick={onRetryCities}

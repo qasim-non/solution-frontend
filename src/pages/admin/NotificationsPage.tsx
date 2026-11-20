@@ -39,7 +39,7 @@ const notificationCopy = (notification: AppNotification) => {
     'إشعار جديد';
   const message =
     readString(notification.data, 'message') ??
-    'لديك إشعار جديد في النظام.';
+    'لديك إشعار جديد في النظام';
   const url = readString(notification.data, 'url');
   return { title, message, url };
 };
@@ -79,7 +79,7 @@ export const NotificationsPage: React.FC = () => {
     <div className="space-y-6 rtl">
       <AdminHeader
         title="الإشعارات"
-        subtitle="الإشعارات عامة بين جميع مديري النظام، وحالة القراءة مشتركة."
+        subtitle="الإشعارات عامة بين جميع مديري النظام، وحالة القراءة مشتركة"
         actions={
           <button
             type="button"
@@ -110,7 +110,7 @@ export const NotificationsPage: React.FC = () => {
           <ErrorState
             message={getApiErrorMessage(
               notificationsQuery.error,
-              'تعذّر تحميل الإشعارات.'
+              'تعذّر تحميل الإشعارات'
             )}
             onRetry={() => void notificationsQuery.refetch()}
           />

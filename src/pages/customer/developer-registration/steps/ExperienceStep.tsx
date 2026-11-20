@@ -118,7 +118,7 @@ export const ExperienceStep: React.FC<ExperienceStepProps> = ({
                 نعم، عملت مع شركات أو جهات رسمية
               </span>
               <span className="mt-1 block text-xs text-[#434655]">
-                خبرة داخل فرق عمل مؤسسية أو عقود رسمية.
+                خبرة داخل فرق عمل مؤسسية أو عقود رسمية
               </span>
             </span>
           </button>
@@ -153,7 +153,7 @@ export const ExperienceStep: React.FC<ExperienceStepProps> = ({
                 لا، عمل حر ومشاريع شخصية فقط
               </span>
               <span className="mt-1 block text-xs text-[#434655]">
-                مشاريع مستقلة أو تعاون مباشر مع العملاء.
+                مشاريع مستقلة أو تعاون مباشر مع العملاء
               </span>
             </span>
           </button>
@@ -172,7 +172,7 @@ export const ExperienceStep: React.FC<ExperienceStepProps> = ({
             </span>
             <p className="text-xs text-[#434655] max-w-sm">
               العدد التقريبي للمشاريع المنجزة أو التي شاركت في بنائها
-              وتسليمها.
+              وتسليمها
             </p>
           </div>
 

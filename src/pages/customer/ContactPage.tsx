@@ -35,7 +35,7 @@ export const ContactPage: React.FC = () => {
     setErrorMsg(null);
 
     if (!fullName.trim() || !email.trim() || !textMessage.trim()) {
-      setErrorMsg('يرجى تعبئة جميع الحقول المطلوبة.');
+      setErrorMsg('يرجى تعبئة جميع الحقول المطلوبة');
       return;
     }
 
@@ -52,7 +52,7 @@ export const ContactPage: React.FC = () => {
       setEmail('');
       setTextMessage('');
     } catch {
-      setErrorMsg('حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة لاحقاً.');
+      setErrorMsg('حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة لاحقاً');
     } finally {
       setIsSubmitting(false);
     }
@@ -64,7 +64,7 @@ export const ContactPage: React.FC = () => {
       <div className="text-center space-y-3">
         <h1 className="text-3xl md:text-4xl font-extrabold text-[#004ac6]">تواصل معنا</h1>
         <p className="text-base text-[#434655] max-w-2xl mx-auto leading-relaxed">
-          نحن هنا لمساعدتك في تحويل رؤيتك التقنية إلى واقع ملموس. فريقنا المتخصص جاهز للرد على استفساراتك.
+          نحن هنا لمساعدتك في تحويل رؤيتك التقنية إلى واقع ملموس. فريقنا المتخصص جاهز للرد على استفساراتك
         </p>
       </div>
 
@@ -113,7 +113,7 @@ export const ContactPage: React.FC = () => {
             <div className="p-6 bg-[#dbe1ff] text-[#004ac6] rounded-xl text-center space-y-3">
               <CheckCircle2 className="w-12 h-12 mx-auto" />
               <h3 className="text-lg font-bold">شكراً لتواصلك!</h3>
-              <p className="text-sm">تم استلام رسالتك وسنقوم بالرد عليك في أقرب وقت.</p>
+              <p className="text-sm">تم استلام رسالتك وسنقوم بالرد عليك في أقرب وقت</p>
               <button
                 onClick={() => setSubmitted(false)}
                 className="mt-2 text-xs font-bold underline cursor-pointer"

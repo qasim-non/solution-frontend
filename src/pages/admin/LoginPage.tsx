@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Settings, User, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { User, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -41,14 +41,16 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto py-12 rtl">
+    <div dir="rtl" className="w-full max-w-md mx-auto py-12 rtl">
       {/* Branding Header */}
       <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-[#004ac6] text-white rounded-2xl mb-4 shadow-md">
-          <Settings className="w-8 h-8" />
-        </div>
+        <img
+          src="/solution-logo-dark-bg.png"
+          alt="حلول برمجية"
+          className="mx-auto mb-4 h-16 w-auto object-contain"
+        />
         <h1 className="text-2xl font-bold text-[#191c1e] mb-1">بوابة الإدارة</h1>
-        <p className="text-sm text-[#434655]">برمجية حلول</p>
+        <p className="text-sm text-[#434655]">حلول برمجية</p>
       </div>
 
       {/* Login Card */}

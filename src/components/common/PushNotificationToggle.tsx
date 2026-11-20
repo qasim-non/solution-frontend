@@ -69,7 +69,7 @@ export function PushNotificationToggle({
         analytics.event('push_notifications_enabled');
       }
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'تعذر تحديث إعدادات الإشعارات.');
+      setError(caught instanceof Error ? caught.message : 'تعذر تحديث إعدادات الإشعارات');
     } finally {
       setBusy(false);
     }
@@ -93,9 +93,9 @@ export function PushNotificationToggle({
 
   const title =
     status === 'unconfigured'
-      ? 'أضف VITE_FIREBASE_VAPID_KEY لتفعيل إشعارات الدفع.'
+      ? 'أضف VITE_FIREBASE_VAPID_KEY لتفعيل إشعارات الدفع'
       : status === 'unsupported'
-        ? 'هذا المتصفح لا يدعم إشعارات الدفع.'
+        ? 'هذا المتصفح لا يدعم إشعارات الدفع'
         : label;
 
   return (

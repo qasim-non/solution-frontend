@@ -103,7 +103,7 @@ export const SpecializationStep: React.FC<SpecializationStepProps> = ({
 
         {error && !loading && (
           <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-[#ffdad6] px-4 py-3 text-sm font-semibold text-[#ba1a1a]">
-            <span>تعذّر تحميل مجالات التخصص.</span>
+            <span>تعذّر تحميل مجالات التخصص</span>
             <button
               type="button"
               onClick={onRetry}

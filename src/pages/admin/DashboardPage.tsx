@@ -44,7 +44,7 @@ export const DashboardPage: React.FC = () => {
     <div className="space-y-6 rtl">
       <AdminHeader
         title="لوحة التحكم"
-        subtitle="نظرة سريعة على الطلبات والأداء العام للمنصة."
+        subtitle="نظرة سريعة على الطلبات والأداء العام للمنصة"
       />
 
       {dashboardQuery.isLoading ? (
@@ -61,7 +61,7 @@ export const DashboardPage: React.FC = () => {
           <ErrorState
             message={getApiErrorMessage(
               dashboardQuery.error,
-              'تعذر تحميل إحصائيات لوحة التحكم. قد تكون الجلسة منتهية.'
+              'تعذر تحميل إحصائيات لوحة التحكم. قد تكون الجلسة منتهية'
             )}
             onRetry={() => void dashboardQuery.refetch()}
           />
@@ -92,7 +92,7 @@ export const DashboardPage: React.FC = () => {
 
           <AdminCard
             title="أقدم الطلبات"
-            subtitle="الطلبات الأقدم التي لم تُعرض بعد في قائمة الفرز الافتراضية."
+            subtitle="الطلبات الأقدم التي لم تُعرض بعد في قائمة الفرز الافتراضية"
             bodyClassName="p-0"
           >
             {data.oldest_requests.length === 0 ? (
@@ -166,7 +166,7 @@ export const DashboardPage: React.FC = () => {
               <div>
                 <p className="mb-1 text-xs font-bold text-on-surface-variant">الوصف</p>
                 <p className="rounded-xl bg-surface-container-low p-4 text-sm leading-relaxed text-on-surface">
-                  {selectedRequest.description || 'لا يوجد وصف.'}
+                  {selectedRequest.description || 'لا يوجد وصف'}
                 </p>
               </div>
               <div>

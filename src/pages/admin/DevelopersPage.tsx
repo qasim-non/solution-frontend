@@ -99,7 +99,7 @@ export const DevelopersPage: React.FC = () => {
     <div className="space-y-6 rtl">
       <AdminHeader
         title="المطورون"
-        subtitle="مراجعة طلبات الانضمام، إدارة الحالات، واستعراض الملفات المهنية."
+        subtitle="مراجعة طلبات الانضمام، إدارة الحالات، واستعراض الملفات المهنية"
         actions={<PageOptionsRefreshButton />}
       />
 
@@ -278,7 +278,7 @@ export const DevelopersPage: React.FC = () => {
       >
         {optionsQuery.isError && (
           <div className="border-b border-error-container bg-error-container/40 px-5 py-3 text-xs font-semibold text-on-error-container">
-            تعذّر تحميل خيارات صفحة المطورين. استخدم زر تحديث الخيارات للمحاولة مرة أخرى.
+            تعذّر تحميل خيارات صفحة المطورين. استخدم زر تحديث الخيارات للمحاولة مرة أخرى
           </div>
         )}
 
@@ -288,14 +288,14 @@ export const DevelopersPage: React.FC = () => {
           <ErrorState
             message={getApiErrorMessage(
               developersQuery.error,
-              'تعذّر تحميل المطورين. قد تكون الجلسة منتهية.'
+              'تعذّر تحميل المطورين. قد تكون الجلسة منتهية'
             )}
             onRetry={() => void developersQuery.refetch()}
           />
         ) : developers.length === 0 ? (
           <EmptyState
             title="لا يوجد مطورون مطابقون"
-            description="جرّب تعديل خيارات البحث والفلترة."
+            description="جرّب تعديل خيارات البحث والفلترة"
           />
         ) : (
           <div className="overflow-x-auto">

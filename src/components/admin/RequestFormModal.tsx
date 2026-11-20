@@ -90,16 +90,16 @@ export const RequestFormModal: React.FC<RequestFormModalProps> = ({
     const cleanDescription = description.trim();
 
     if (name.length < 3 || name.length > 100) {
-      errors.project_name = 'اسم المشروع يجب أن يكون بين 3 و 100 حرف.';
+      errors.project_name = 'اسم المشروع يجب أن يكون بين 3 و 100 حرف';
     }
     if (cleanMobile.length < 10 || cleanMobile.length > 20) {
-      errors.mobile = 'رقم الهاتف يجب أن يكون بين 10 و 20 خانتاً.';
+      errors.mobile = 'رقم الهاتف يجب أن يكون بين 10 و 20 خانتاً';
     }
     if (cleanDescription.length > 1000) {
-      errors.description = 'الوصف لا يمكن أن يتجاوز 1000 حرف.';
+      errors.description = 'الوصف لا يمكن أن يتجاوز 1000 حرف';
     }
     if (selectedTypes.length === 0) {
-      errors.system_types = 'اختر نوع نظام واحد على الأقل.';
+      errors.system_types = 'اختر نوع نظام واحد على الأقل';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -128,7 +128,7 @@ export const RequestFormModal: React.FC<RequestFormModalProps> = ({
         );
       }
       setFormError(
-        getApiErrorMessage(error, 'تعذّر حفظ الطلب. يرجى المحاولة مرة أخرى.')
+        getApiErrorMessage(error, 'تعذّر حفظ الطلب. يرجى المحاولة مرة أخرى')
       );
     } finally {
       setIsSaving(false);
@@ -150,8 +150,8 @@ export const RequestFormModal: React.FC<RequestFormModalProps> = ({
             </h2>
             <p className="mt-0.5 text-xs text-on-surface-variant">
               {mode === 'create'
-                ? 'سيتم إنشاء الطلب بحالة قيد الانتظار.'
-                : 'يتم استبدال أنظمة العمل عند الحفظ. روابط التواصل تبقى كما هي.'}
+                ? 'سيتم إنشاء الطلب بحالة قيد الانتظار'
+                : 'يتم استبدال أنظمة العمل عند الحفظ. روابط التواصل تبقى كما هي'}
             </p>
           </div>
           <button

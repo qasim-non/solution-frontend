@@ -54,7 +54,7 @@ export const SocialMediaModal: React.FC<SocialMediaModalProps> = ({
             </div>
           ) : accounts.length === 0 ? (
             <p className="py-6 text-center text-sm text-[#434655]">
-              لا توجد حسابات تواصل مضافة لهذا الطلب.
+              لا توجد حسابات تواصل مضافة لهذا الطلب
             </p>
           ) : (
             <div className="space-y-3">

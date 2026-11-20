@@ -30,12 +30,12 @@ export const TechnologyInput: React.FC<TechnologyInputProps> = ({
     }
 
     if (technology.length > MAX_TECHNOLOGY_LENGTH) {
-      setLocalError(`اسم التقنية يجب ألا يتجاوز ${MAX_TECHNOLOGY_LENGTH} حرفاً.`);
+      setLocalError(`اسم التقنية يجب ألا يتجاوز ${MAX_TECHNOLOGY_LENGTH} حرفاً`);
       return;
     }
 
     if (isAtLimit) {
-      setLocalError(`يمكن إضافة ${MAX_TECHNOLOGIES} تقنية كحد أقصى.`);
+      setLocalError(`يمكن إضافة ${MAX_TECHNOLOGIES} تقنية كحد أقصى`);
       return;
     }
 
@@ -44,7 +44,7 @@ export const TechnologyInput: React.FC<TechnologyInputProps> = ({
         (item) => item.toLowerCase() === technology.toLowerCase()
       )
     ) {
-      setLocalError('هذه التقنية مضافة بالفعل.');
+      setLocalError('هذه التقنية مضافة بالفعل');
       return;
     }
 

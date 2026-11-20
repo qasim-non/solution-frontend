@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   Bell,
-  Code2,
   FileText,
   LayoutDashboard,
   LogOut,
@@ -47,12 +46,17 @@ export const AdminSidebar: React.FC = () => {
   };
 
   return (
-    <aside className="fixed right-0 top-0 z-40 hidden h-full w-64 flex-col border-l border-outline-variant/50 bg-surface-container-low px-4 py-6 rtl md:flex">
+    <aside
+      dir="rtl"
+      className="fixed right-0 top-0 z-40 hidden h-full w-64 flex-col border-l border-outline-variant/50 bg-surface-container-low px-4 py-6 rtl md:flex"
+    >
       <div className="mb-8 px-2">
-        <div className="mb-2 flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-on-primary shadow-sm">
-            <Code2 className="h-5 w-5" />
-          </div>
+        <div dir="rtl" className="mb-2 flex items-center gap-2">
+          <img
+            src="/solution-logo-dark-bg.png"
+            alt="حلول برمجية"
+            className="h-9 w-auto object-contain"
+          />
           <h1 className="text-lg font-bold text-primary">حلول برمجية</h1>
         </div>
         <p className="text-xs text-on-surface-variant">بوابة الإدارة والعمليات</p>

@@ -13,7 +13,7 @@ interface AdminHeaderProps {
 
 export const AdminHeader: React.FC<AdminHeaderProps> = ({
   title = 'مرحباً بك في الإدارة',
-  subtitle = 'إدارة الطلبات والعمليات اليومية.',
+  subtitle = 'إدارة الطلبات والعمليات اليومية',
   actions,
 }) => {
   const unreadQuery = useQuery({

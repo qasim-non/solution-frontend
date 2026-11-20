@@ -61,7 +61,7 @@ const validateFile = (
   label: string
 ): string | null => {
   if (file.size > MAX_FILE_SIZE_BYTES) {
-    return `حجم ${label} يتجاوز الحد الأقصى (10 ميجابايت).`;
+    return `حجم ${label} يتجاوز الحد الأقصى (10 ميجابايت)`;
   }
 
   const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
@@ -69,7 +69,7 @@ const validateFile = (
   if (!allowedExtensions.includes(extension)) {
     return `صيغة ${label} غير مدعومة. الصيغ المسموحة: ${allowedExtensions
       .map((item) => item.toUpperCase())
-      .join('، ')}.`;
+      .join('، ')}`;
   }
 
   return null;
@@ -91,43 +91,43 @@ export const validateStep = (
     const fullName = state.fullName.trim();
 
     if (!fullName) {
-      errors.full_name = 'يرجى إدخال الاسم الكامل.';
+      errors.full_name = 'يرجى إدخال الاسم الكامل';
     } else if (fullName.length > 255) {
-      errors.full_name = 'الاسم يجب ألا يتجاوز 255 حرفاً.';
+      errors.full_name = 'الاسم يجب ألا يتجاوز 255 حرفاً';
     }
 
     const digits = mobileDigits(state.mobileNumber);
 
     if (!digits) {
-      errors.mobile = 'يرجى إدخال رقم الواتساب.';
+      errors.mobile = 'يرجى إدخال رقم الواتساب';
     } else if (digits.length < 8 || digits.length > 12) {
-      errors.mobile = 'يرجى إدخال رقم هاتف صحيح (8 إلى 12 رقماً).';
+      errors.mobile = 'يرجى إدخال رقم هاتف صحيح (8 إلى 12 رقماً)';
     }
 
     if (!state.cityId) {
-      errors.city_id = 'يرجى اختيار المدينة.';
+      errors.city_id = 'يرجى اختيار المدينة';
     }
   }
 
   if (step === 1) {
     if (state.technologies.length > MAX_TECHNOLOGIES) {
-      errors.technologies = `يمكن إضافة ${MAX_TECHNOLOGIES} تقنية كحد أقصى.`;
+      errors.technologies = `يمكن إضافة ${MAX_TECHNOLOGIES} تقنية كحد أقصى`;
     }
 
     if (
       state.technologies.some((technology) => technology.length > MAX_TECHNOLOGY_LENGTH)
     ) {
-      errors.technologies = 'اسم التقنية يجب ألا يتجاوز 255 حرفاً.';
+      errors.technologies = 'اسم التقنية يجب ألا يتجاوز 255 حرفاً';
     }
   }
 
   if (step === 2) {
     if (!state.experienceYears) {
-      errors.experience_years = 'يرجى اختيار سنوات الخبرة.';
+      errors.experience_years = 'يرجى اختيار سنوات الخبرة';
     }
 
     if (state.hasInstitutionalExperience === null) {
-      errors.has_institutional_experience = 'يرجى تحديد نوع الخبرة السابقة.';
+      errors.has_institutional_experience = 'يرجى تحديد نوع الخبرة السابقة';
     }
 
     if (state.completedProjectsCount.trim() !== '') {
@@ -140,22 +140,22 @@ export const validateStep = (
         count > 4294967295
       ) {
         errors.completed_projects_count =
-          'يرجى إدخال عدد صحيح موجب للمشاريع المكتملة.';
+          'يرجى إدخال عدد صحيح موجب للمشاريع المكتملة';
       }
     }
   }
 
   if (step === 3) {
     if (!state.contractType) {
-      errors.contract_type = 'يرجى اختيار نوع التعاقد المفضل.';
+      errors.contract_type = 'يرجى اختيار نوع التعاقد المفضل';
     }
 
     if (!state.weeklyHours) {
-      errors.weekly_hours = 'يرجى اختيار عدد ساعات التفرغ الأسبوعية.';
+      errors.weekly_hours = 'يرجى اختيار عدد ساعات التفرغ الأسبوعية';
     }
 
     if (state.bio.trim().length > MAX_BIO_LENGTH) {
-      errors.bio = `النبذة المهنية يجب ألا تتجاوز ${MAX_BIO_LENGTH} حرفاً.`;
+      errors.bio = `النبذة المهنية يجب ألا تتجاوز ${MAX_BIO_LENGTH} حرفاً`;
     }
 
     if (state.cv) {
@@ -216,15 +216,15 @@ export const firstStepWithError = (errors: FieldErrors): number => {
  */
 const SERVER_MESSAGE_TRANSLATIONS: Record<string, string> = {
   'The mobile has already been taken.':
-    'رقم الواتساب هذا مسجل مسبقاً، يرجى استخدام رقم آخر.',
+    'رقم الواتساب هذا مسجل مسبقاً، يرجى استخدام رقم آخر',
   'The selected city id is invalid.':
-    'المدينة المحددة غير صالحة، يرجى اختيار مدينة أخرى.',
+    'المدينة المحددة غير صالحة، يرجى اختيار مدينة أخرى',
   'The selected experience years is invalid.':
-    'قيمة سنوات الخبرة المحددة غير صالحة.',
+    'قيمة سنوات الخبرة المحددة غير صالحة',
   'The selected contract type is invalid.':
-    'نوع التعاقد المحدد غير صالح.',
+    'نوع التعاقد المحدد غير صالح',
   'The selected weekly hours is invalid.':
-    'عدد ساعات التفرغ المحدد غير صالح.',
+    'عدد ساعات التفرغ المحدد غير صالح',
 };
 
 const translateServerMessage = (message: string): string => {
@@ -233,15 +233,15 @@ const translateServerMessage = (message: string): string => {
   }
 
   if (/must be a file of type/i.test(message)) {
-    return 'صيغة الملف غير مدعومة.';
+    return 'صيغة الملف غير مدعومة';
   }
 
   if (/must have one of the following extensions/i.test(message)) {
-    return 'امتداد الملف غير مدعوم.';
+    return 'امتداد الملف غير مدعوم';
   }
 
   if (/must be a file/i.test(message)) {
-    return 'يرجى إرفاق ملف صالح.';
+    return 'يرجى إرفاق ملف صالح';
   }
 
   return message;

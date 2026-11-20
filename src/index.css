@@ -61,6 +61,10 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  .rtl {
+    direction: rtl;
+  }
+
   ::selection {
     background-color: var(--color-primary-fixed);
     color: var(--color-on-primary-fixed-variant);

@@ -64,6 +64,11 @@ const systemTypeLabels: Record<string, string> = {
 const actionButton =
   'inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold transition-colors';
 
+const whatsappHref = (mobile?: string): string | null => {
+  const digits = (mobile ?? '').replace(/\D/g, '');
+  return digits ? `https://wa.me/${digits}` : null;
+};
+
 export const RequestsPage: React.FC = () => {
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -158,8 +163,8 @@ export const RequestsPage: React.FC = () => {
     onError: (error) => {
       setActionError(
         isConflictError(error)
-          ? 'هذه هي الحالة الحالية للطلب، تم تحديث القائمة.'
-          : getApiErrorMessage(error, 'تعذّر تحديث حالة الطلب.')
+          ? 'هذه هي الحالة الحالية للطلب، تم تحديث القائمة'
+          : getApiErrorMessage(error, 'تعذّر تحديث حالة الطلب')
       );
       void refreshRequests();
     },
@@ -175,7 +180,7 @@ export const RequestsPage: React.FC = () => {
       void refreshRequests();
     },
     onError: (error) => {
-      setActionError(getApiErrorMessage(error, 'تعذّر حذف الطلب.'));
+      setActionError(getApiErrorMessage(error, 'تعذّر حذف الطلب'));
     },
   });
 
@@ -186,7 +191,7 @@ export const RequestsPage: React.FC = () => {
       void refreshRequests();
     },
     onError: (error) => {
-      setActionError(getApiErrorMessage(error, 'تعذّر حذف روابط التواصل.'));
+      setActionError(getApiErrorMessage(error, 'تعذّر حذف روابط التواصل'));
     },
   });
 
@@ -195,7 +200,7 @@ export const RequestsPage: React.FC = () => {
     setFilterError(null);
 
     if (Boolean(filters.start_date) !== Boolean(filters.end_date)) {
-      setFilterError('أدخل تاريخ البدء وتاريخ الانتهاء معاً.');
+      setFilterError('أدخل تاريخ البدء وتاريخ الانتهاء معاً');
       return;
     }
 
@@ -228,7 +233,7 @@ export const RequestsPage: React.FC = () => {
     <div className="space-y-6 rtl">
       <AdminHeader
         title="طلبات المشاريع"
-        subtitle="إدارة ومتابعة كافة طلبات البرمجيات والتطبيقات المقدمة من العملاء."
+        subtitle="إدارة ومتابعة كافة طلبات البرمجيات والتطبيقات المقدمة من العملاء"
         actions={
           <button
             type="button"
@@ -359,7 +364,7 @@ export const RequestsPage: React.FC = () => {
       >
         {optionsQuery.isError && (
           <div className="border-b border-error-container bg-error-container/40 px-5 py-3 text-xs font-semibold text-on-error-container">
-            تعذّر تحميل خيارات الفلترة. يمكنك تحديثها من الزر أعلاه.
+            تعذّر تحميل خيارات الفلترة. يمكنك تحديثها من الزر أعلاه
           </div>
         )}
 
@@ -369,14 +374,14 @@ export const RequestsPage: React.FC = () => {
           <ErrorState
             message={getApiErrorMessage(
               requestsQuery.error,
-              'تعذّر تحميل الطلبات. قد تكون الجلسة منتهية.'
+              'تعذّر تحميل الطلبات. قد تكون الجلسة منتهية'
             )}
             onRetry={() => void requestsQuery.refetch()}
           />
         ) : requests.length === 0 ? (
           <EmptyState
             title="لا توجد طلبات مطابقة"
-            description="جرّب تعديل خيارات الفلترة أو أضف طلباً جديداً."
+            description="جرّب تعديل خيارات الفلترة أو أضف طلباً جديداً"
           />
         ) : (
           <div className="overflow-x-auto">
@@ -403,7 +408,21 @@ export const RequestsPage: React.FC = () => {
                       </p>
                     </td>
                     <td className="p-4 font-mono text-xs text-on-surface-variant" dir="ltr">
-                      {request.mobile ?? '—'}
+                      {(() => {
+                        const href = whatsappHref(request.mobile);
+                        return href ? (
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-primary underline decoration-dotted underline-offset-2 hover:text-primary-container"
+                          >
+                            {request.mobile}
+                          </a>
+                        ) : (
+                          request.mobile ?? '—'
+                        );
+                      })()}
                     </td>
                     <td className="p-4">
                       <div className="flex flex-wrap justify-end gap-1.5">

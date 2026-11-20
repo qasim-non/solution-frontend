@@ -12,7 +12,7 @@ export const AccountPage: React.FC = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-[#191c1e]">بوابة العميل</h1>
-            <p className="text-sm text-[#434655]">مرحباً بك في منصة تتبع طلباتك واستفساراتك البرمجية.</p>
+            <p className="text-sm text-[#434655]">مرحباً بك في منصة تتبع طلباتك واستفساراتك البرمجية</p>
           </div>
         </div>
 
@@ -32,7 +32,7 @@ export const AccountPage: React.FC = () => {
           </div>
           <h3 className="text-lg font-bold text-[#191c1e]">متابعة طلب مشروع</h3>
           <p className="text-xs text-[#434655] leading-relaxed">
-            تمت إضافة آلية تتبع تلقائية لجميع المشاريع المقدمة عبر رقم الواتساب المسجل.
+            تمت إضافة آلية تتبع تلقائية لجميع المشاريع المقدمة عبر رقم الواتساب المسجل
           </p>
         </div>
 
@@ -42,7 +42,7 @@ export const AccountPage: React.FC = () => {
           </div>
           <h3 className="text-lg font-bold text-[#191c1e]">المراسلات والدعم</h3>
           <p className="text-xs text-[#434655] leading-relaxed">
-            يمكنك إرسال الاستفسارات الفنية مباشرة لفريق الاستشارات البرمجية عبر صفحة الاتصال.
+            يمكنك إرسال الاستفسارات الفنية مباشرة لفريق الاستشارات البرمجية عبر صفحة الاتصال
           </p>
           <Link to="/contact" className="text-xs font-bold text-[#004ac6] hover:underline inline-block">
             إرسال استفسار ←

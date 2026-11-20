@@ -12,15 +12,25 @@ export const TopNavBar: React.FC = () => {
     location.pathname.startsWith('/join-developer');
 
   return (
-    <header className="w-full top-0 sticky bg-[#f7f9fb] dark:bg-[#191c1e] border-b border-[#c3c6d7]/40 z-50 transition-all duration-200">
+    <header
+      dir="rtl"
+      className="w-full top-0 sticky bg-[#f7f9fb] dark:bg-[#191c1e] border-b border-[#c3c6d7]/40 z-50 transition-all duration-200"
+    >
       <div className="flex justify-between items-center px-6 py-4 max-w-[1200px] mx-auto rtl">
         {/* Brand */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="w-9 h-9 rounded-lg bg-[#004ac6] flex items-center justify-center text-white font-bold text-lg shadow-sm">
-            &lt;&gt;
-          </div>
+        <Link to="/" dir="rtl" className="flex items-center gap-2 group">
+          <img
+            src="/solution-logo-dark-bg.png"
+            alt="حلول برمجية"
+            className="h-9 w-auto object-contain dark:hidden"
+          />
+          <img
+            src="/solution-logo-white-transparent.png"
+            alt="حلول برمجية"
+            className="hidden h-9 w-auto object-contain dark:block"
+          />
           <div className="font-bold text-xl text-[#004ac6] dark:text-[#b4c5ff] group-hover:opacity-90 transition-opacity">
-           حلول برمجية
+            حلول برمجية
           </div>
         </Link>
 
@@ -55,9 +65,6 @@ export const TopNavBar: React.FC = () => {
             }`}
           >
             شبكة المطورين
-            <span className="rounded-full bg-[#dbe1ff] px-2 py-0.5 text-[10px] font-bold text-[#004ac6]">
-              جديد
-            </span>
           </Link>
           <Link
             to="/contact"
@@ -94,7 +101,10 @@ export const TopNavBar: React.FC = () => {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[#c3c6d7]/30 bg-[#ffffff] px-6 py-4 space-y-3 rtl animate-in slide-in-from-top duration-200">
+        <div
+          dir="rtl"
+          className="md:hidden border-t border-[#c3c6d7]/30 bg-[#ffffff] px-6 py-4 space-y-3 rtl animate-in slide-in-from-top duration-200"
+        >
           <Link
             to="/"
             onClick={() => setMobileMenuOpen(false)}
@@ -115,9 +125,6 @@ export const TopNavBar: React.FC = () => {
             className="flex items-center gap-2 py-2 text-base font-semibold text-[#191c1e] hover:text-[#004ac6]"
           >
             شبكة المطورين
-            <span className="rounded-full bg-[#dbe1ff] px-2 py-0.5 text-[10px] font-bold text-[#004ac6]">
-              جديد
-            </span>
           </Link>
           <Link
             to="/contact"

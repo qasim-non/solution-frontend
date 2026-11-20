@@ -13,7 +13,7 @@ const mobileLinks = [
 
 export const AdminLayout: React.FC = () => {
   return (
-    <div className="flex min-h-screen bg-surface text-on-surface rtl font-sans">
+    <div dir="rtl" className="flex min-h-screen bg-surface text-on-surface rtl font-sans">
       <AdminSidebar />
       <div className="w-full min-w-0 md:mr-64">
         <nav className="sticky top-0 z-30 flex gap-1 overflow-x-auto border-b border-outline-variant/40 bg-surface-container-lowest px-3 py-2 rtl md:hidden">

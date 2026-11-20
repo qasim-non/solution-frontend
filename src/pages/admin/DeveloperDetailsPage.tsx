@@ -81,15 +81,15 @@ export const DeveloperDetailsPage: React.FC = () => {
       adminApi.updateDeveloperStatus(developerId, status as never),
     onSuccess: async () => {
       setActionError(null);
-      setActionSuccess('تم تحديث حالة المطور.');
+      setActionSuccess('تم تحديث حالة المطور');
       await refreshDeveloper();
     },
     onError: (error) => {
       setActionSuccess(null);
       setActionError(
         isConflictError(error)
-          ? 'هذه هي الحالة الحالية للمطور.'
-          : getApiErrorMessage(error, 'تعذّر تحديث حالة المطور.')
+          ? 'هذه هي الحالة الحالية للمطور'
+          : getApiErrorMessage(error, 'تعذّر تحديث حالة المطور')
       );
     },
   });
@@ -99,15 +99,15 @@ export const DeveloperDetailsPage: React.FC = () => {
       adminApi.updateDeveloperReadiness(developerId, isReady),
     onSuccess: async () => {
       setActionError(null);
-      setActionSuccess('تم تحديث حالة الجاهزية.');
+      setActionSuccess('تم تحديث حالة الجاهزية');
       await refreshDeveloper();
     },
     onError: (error) => {
       setActionSuccess(null);
       setActionError(
         isConflictError(error)
-          ? 'القيمة المطلوبة هي القيمة الحالية بالفعل.'
-          : getApiErrorMessage(error, 'تعذّر تحديث الجاهزية.')
+          ? 'القيمة المطلوبة هي القيمة الحالية بالفعل'
+          : getApiErrorMessage(error, 'تعذّر تحديث الجاهزية')
       );
     },
   });
@@ -117,12 +117,12 @@ export const DeveloperDetailsPage: React.FC = () => {
     onSuccess: async () => {
       setNoteText('');
       setActionError(null);
-      setActionSuccess('تمت إضافة الملاحظة.');
+      setActionSuccess('تمت إضافة الملاحظة');
       await refreshDeveloper();
     },
     onError: (error) => {
       setActionSuccess(null);
-      setActionError(getApiErrorMessage(error, 'تعذّر إضافة الملاحظة.'));
+      setActionError(getApiErrorMessage(error, 'تعذّر إضافة الملاحظة'));
     },
   });
 
@@ -138,12 +138,12 @@ export const DeveloperDetailsPage: React.FC = () => {
       navigate('/dashboard/developers', { replace: true });
     },
     onError: (error) => {
-      setActionError(getApiErrorMessage(error, 'تعذّر حذف المطور.'));
+      setActionError(getApiErrorMessage(error, 'تعذّر حذف المطور'));
     },
   });
 
   if (!Number.isInteger(developerId) || developerId <= 0) {
-    return <ErrorState message="معرّف المطور غير صالح." />;
+    return <ErrorState message="معرّف المطور غير صالح" />;
   }
 
   return (
@@ -182,7 +182,7 @@ export const DeveloperDetailsPage: React.FC = () => {
           <ErrorState
             message={getApiErrorMessage(
               detailsQuery.error,
-              'تعذّر تحميل ملف المطور.'
+              'تعذّر تحميل ملف المطور'
             )}
             onRetry={() => void detailsQuery.refetch()}
           />
@@ -276,12 +276,12 @@ export const DeveloperDetailsPage: React.FC = () => {
 
             <AdminCard
               title="المستندات"
-              subtitle="روابط التنزيل مؤقتة وصالحة لمدة 15 دقيقة."
+              subtitle="روابط التنزيل مؤقتة وصالحة لمدة 15 دقيقة"
               bodyClassName="p-0"
             >
               {developer.documents.length === 0 ? (
                 <p className="px-5 py-8 text-center text-sm text-on-surface-variant">
-                  لا توجد مستندات مرفقة.
+                  لا توجد مستندات مرفقة
                 </p>
               ) : (
                 <div className="divide-y divide-outline-variant/30">
@@ -322,7 +322,7 @@ export const DeveloperDetailsPage: React.FC = () => {
                   event.preventDefault();
                   const text = noteText.trim();
                   if (!text || text.length > 3000) {
-                    setActionError('الملاحظة مطلوبة ويجب ألا تتجاوز 3000 حرف.');
+                    setActionError('الملاحظة مطلوبة ويجب ألا تتجاوز 3000 حرف');
                     return;
                   }
                   noteMutation.mutate(text);
@@ -349,7 +349,7 @@ export const DeveloperDetailsPage: React.FC = () => {
 
               <div className="mt-5 space-y-3 border-t border-outline-variant/40 pt-5">
                 {developer.notes.length === 0 ? (
-                  <p className="text-sm text-on-surface-variant">لا توجد ملاحظات بعد.</p>
+                  <p className="text-sm text-on-surface-variant">لا توجد ملاحظات بعد</p>
                 ) : (
                   developer.notes.map((note) => (
                     <div key={note.id} className="rounded-xl bg-surface-container-low p-4">

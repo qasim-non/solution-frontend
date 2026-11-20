@@ -35,7 +35,7 @@ export const AccountSettingsPage: React.FC = () => {
         );
       }
       setFormError(
-        getApiErrorMessage(error, 'تعذّر تحديث بيانات الحساب.')
+        getApiErrorMessage(error, 'تعذّر تحديث بيانات الحساب')
       );
     },
   });
@@ -49,18 +49,18 @@ export const AccountSettingsPage: React.FC = () => {
     const cleanUsername = username.trim();
 
     if (!cleanUsername && !password && !confirmPassword) {
-      setFormError('أدخل اسم المستخدم أو كلمة المرور على الأقل.');
+      setFormError('أدخل اسم المستخدم أو كلمة المرور على الأقل');
       return;
     }
 
     if (cleanUsername && (cleanUsername.length < 3 || cleanUsername.length > 50)) {
-      errors.username = 'اسم المستخدم يجب أن يكون بين 3 و 50 حرفاً.';
+      errors.username = 'اسم المستخدم يجب أن يكون بين 3 و 50 حرفاً';
     }
     if (password && (password.length < 8 || password.length > 255)) {
-      errors.password = 'كلمة المرور يجب أن تكون بين 8 و 255 حرفاً.';
+      errors.password = 'كلمة المرور يجب أن تكون بين 8 و 255 حرفاً';
     }
     if (password !== confirmPassword) {
-      errors.confirm_password = 'تأكيد كلمة المرور غير مطابق.';
+      errors.confirm_password = 'تأكيد كلمة المرور غير مطابق';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -88,7 +88,7 @@ export const AccountSettingsPage: React.FC = () => {
     <div className="max-w-3xl space-y-6 rtl">
       <AdminHeader
         title="إعدادات الحساب"
-        subtitle="تحديث اسم مستخدم المدير وكلمة المرور الخاصة بحسابك الحالي."
+        subtitle="تحديث اسم مستخدم المدير وكلمة المرور الخاصة بحسابك الحالي"
       />
 
       {formError && (

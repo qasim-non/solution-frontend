@@ -4,7 +4,7 @@ import { Globe, Smartphone, Monitor, Palette, Brain, Layers, CheckCircle, Headph
 
 export const ServicesPage: React.FC = () => {
   return (
-    <div className="py-12 px-6 max-w-[1200px] mx-auto rtl space-y-16">
+    <div dir="rtl" className="py-12 px-6 max-w-[1200px] mx-auto rtl space-y-16">
       {/* Header */}
       <div className="text-center space-y-4">
         <span className="inline-block px-4 py-1 bg-[#004ac6]/10 text-[#004ac6] text-xs font-semibold rounded-full">
@@ -14,7 +14,7 @@ export const ServicesPage: React.FC = () => {
         </span>
         <h1 className="text-3xl md:text-4xl font-extrabold text-[#191c1e]">خدماتنا المتميزة</h1>
         <p className="text-base text-[#434655] max-w-2xl mx-auto">
-          نحول أفكارك الطموحة إلى واقع رقمي ملموس من خلال هندسة برمجية دقيقة وتصاميم عصرية تلبي احتياجات سوق العمل.
+          نحول أفكارك الطموحة إلى واقع رقمي ملموس من خلال هندسة برمجية دقيقة وتصاميم عصرية تلبي احتياجات سوق العمل
         </p>
       </div>
 
@@ -26,7 +26,7 @@ export const ServicesPage: React.FC = () => {
           </div>
           <h3 className="text-lg font-bold text-[#191c1e] mb-2">تطوير المواقع</h3>
           <p className="text-sm text-[#434655] leading-relaxed">
-            بناء منصات ويب متطورة، سريعة، ومتوافقة مع كافة الشاشات باستخدام أحدث تقنيات الويب العالمية.
+            بناء منصات ويب متطورة، سريعة، ومتوافقة مع كافة الشاشات باستخدام أحدث تقنيات الويب العالمية
           </p>
         </div>
 
@@ -36,7 +36,7 @@ export const ServicesPage: React.FC = () => {
           </div>
           <h3 className="text-lg font-bold text-[#191c1e] mb-2">تطبيقات الجوال</h3>
           <p className="text-sm text-[#434655] leading-relaxed">
-            تطوير تطبيقات iOS و Android أصلية ومبتكرة توفر تجربة مستخدم سلسة وأداءً تقنياً عالياً.
+            تطوير تطبيقات iOS و Android أصلية ومبتكرة توفر تجربة مستخدم سلسة وأداءً تقنياً عالياً
           </p>
         </div>
 
@@ -46,7 +46,7 @@ export const ServicesPage: React.FC = () => {
           </div>
           <h3 className="text-lg font-bold text-[#191c1e] mb-2">برامج سطح المكتب</h3>
           <p className="text-sm text-[#434655] leading-relaxed">
-            <span dir="rtl" style={{ unicodeBidi: 'isolate', direction: 'rtl' }}>حلول برمجية متكاملة</span> لكافة أنظمة التشغيل لإدارة العمليات المعقدة بكفاءة وموثوقية تامة.
+            <span dir="rtl" style={{ unicodeBidi: 'isolate', direction: 'rtl' }}>حلول برمجية متكاملة</span> لكافة أنظمة التشغيل لإدارة العمليات المعقدة بكفاءة وموثوقية تامة
           </p>
         </div>
 
@@ -56,7 +56,7 @@ export const ServicesPage: React.FC = () => {
           </div>
           <h3 className="text-lg font-bold text-[#191c1e] mb-2">تصميم واجهات المستخدم</h3>
           <p className="text-sm text-[#434655] leading-relaxed">
-            تصميم واجهات عصرية تركز على سهولة الاستخدام وجمال التفاصيل لخلق تجربة رقمية لا تُنسى.
+            تصميم واجهات عصرية تركز على سهولة الاستخدام وجمال التفاصيل لخلق تجربة رقمية لا تُنسى
           </p>
         </div>
       </div>
@@ -66,7 +66,7 @@ export const ServicesPage: React.FC = () => {
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-bold text-[#191c1e]">كيف نعمل؟</h2>
           <p className="text-sm text-[#434655]">
-            مسار عمل مدروس يضمن تحويل رؤيتك إلى منتج استثنائي.
+            مسار عمل مدروس يضمن تحويل رؤيتك إلى منتج استثنائي
           </p>
         </div>
 
@@ -76,7 +76,7 @@ export const ServicesPage: React.FC = () => {
               <Brain className="w-12 h-12 text-[#b4c5ff]" />
               <h3 className="text-xl font-bold">01. التحليل والاستراتيجية</h3>
               <p className="text-sm text-white/90 leading-relaxed">
-                نبدأ بفهم عميق لأهداف عملك، تحديد الجمهور المستهدف، ورسم خارطة الطريق التقنية الأكثر فعالية.
+                نبدأ بفهم عميق لأهداف عملك، تحديد الجمهور المستهدف، ورسم خارطة الطريق التقنية الأكثر فعالية
               </p>
             </div>
             <div className="pt-8 text-xs text-[#b4c5ff]">مرحلة التخطيط المتقدم</div>
@@ -88,7 +88,7 @@ export const ServicesPage: React.FC = () => {
               <h3 className="text-xl font-bold text-[#191c1e]">02. التصميم والتطوير</h3>
             </div>
             <p className="text-sm text-[#434655] leading-relaxed">
-              عملية متوازية بين الإبداع البصري والهندسة البرمجية لبناء واجهات جذابة وأنظمة سريعة الاستجابة.
+              عملية متوازية بين الإبداع البصري والهندسة البرمجية لبناء واجهات جذابة وأنظمة سريعة الاستجابة
             </p>
           </div>
 
@@ -98,7 +98,7 @@ export const ServicesPage: React.FC = () => {
               <h3 className="text-xl font-bold">03. الجودة والتدقيق</h3>
             </div>
             <p className="text-sm text-white/90 leading-relaxed">
-              اختبارات دقيقة وشاملة لضمان خلو النظام من الثغرات والأخطاء البرمجية قبل الإطلاق الرسمي.
+              اختبارات دقيقة وشاملة لضمان خلو النظام من الثغرات والأخطاء البرمجية قبل الإطلاق الرسمي
             </p>
           </div>
 
@@ -108,7 +108,7 @@ export const ServicesPage: React.FC = () => {
               <h3 className="text-xl font-bold">04. الإطلاق والدعم</h3>
             </div>
             <p className="text-sm text-[#434655] leading-relaxed">
-              نرافقك في لحظة الإطلاق ونقدم دعماً فنياً مستمراً لضمان استقرار ونمو مشروعك الرقمي.
+              نرافقك في لحظة الإطلاق ونقدم دعماً فنياً مستمراً لضمان استقرار ونمو مشروعك الرقمي
             </p>
           </div>
         </div>

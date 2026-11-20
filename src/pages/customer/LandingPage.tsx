@@ -85,7 +85,7 @@ export const LandingPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen rtl">
+    <div dir="rtl" className="flex flex-col min-h-screen rtl">
       {/* Hero Section */}
       <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden py-16 px-6 bg-[#f7f9fb]">
         <canvas
@@ -105,7 +105,7 @@ export const LandingPage: React.FC = () => {
           </h1>
 
           <p className="text-lg text-[#434655] max-w-2xl leading-relaxed">
-            نصمم ونطور أنظمة ويب وتطبيقات جوال وبرامج سطح مكتب بجودة عالية وتجربة استخدام مميزة تناسب احتياجات مشروعك.
+            نصمم ونطور أنظمة ويب وتطبيقات جوال وبرامج سطح مكتب بجودة عالية وتجربة استخدام مميزة تناسب احتياجات مشروعك
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mt-2">
@@ -126,7 +126,10 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      <PublicStatisticsBar className="relative z-10 mx-auto -mt-2 w-full max-w-[1000px] px-6" />
+      <PublicStatisticsBar
+        variant="solid"
+        className="relative z-10 mx-auto my-8 w-full max-w-[1000px] px-6"
+      />
 
       {/* Features Section */}
       <section className="py-20 bg-[#ffffff]">
@@ -138,7 +141,7 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="text-xl font-bold text-[#191c1e]">تطوير احترافي</h3>
               <p className="text-sm text-[#434655] leading-relaxed">
-                نبني أنظمة قوية وقابلة للتوسع باستخدام أحدث التقنيات وأفضل الممارسات البرمجية.
+                نبني أنظمة قوية وقابلة للتوسع باستخدام أحدث التقنيات وأفضل الممارسات البرمجية
               </p>
             </div>
 
@@ -148,7 +151,7 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="text-xl font-bold text-[#191c1e]">تصميم مميز</h3>
               <p className="text-sm text-[#434655] leading-relaxed">
-                واجهات عصرية وتجربة استخدام سهلة ومريحة تناسب هوية علامتك التجارية.
+                واجهات عصرية وتجربة استخدام سهلة ومريحة تناسب هوية علامتك التجارية
               </p>
             </div>
 
@@ -158,7 +161,7 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="text-xl font-bold text-[#191c1e]">حلول مخصصة</h3>
               <p className="text-sm text-[#434655] leading-relaxed">
-                كل مشروع يتم تصميمه وتطويره خصيصاً بما يناسب طبيعة متطلباتك ونشاطك التجاري.
+                كل مشروع يتم تصميمه وتطويره خصيصاً بما يناسب طبيعة متطلباتك ونشاطك التجاري
               </p>
             </div>
           </div>
@@ -197,24 +200,15 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-3xl mx-auto px-6 text-center flex flex-col items-center gap-6">
           <h2 className="text-3xl font-bold text-[#191c1e]">هل لديك فكرة مشروع؟</h2>
           <p className="text-base text-[#434655]">
-            ابدأ الآن وأرسل تفاصيل مشروعك وسنتواصل معك في أقرب وقت.
+            ابدأ الآن وأرسل تفاصيل مشروعك وسنتواصل معك في أقرب وقت
           </p>
-          <div className="flex flex-col sm:flex-row items-center gap-3">
-            <Link
-              to="/request"
-              className="bg-[#2563eb] text-white text-lg font-semibold px-10 py-4 rounded-xl shadow-lg hover:bg-[#004ac6] transition-all active:scale-95 flex items-center gap-3"
-            >
-              <span>إرسال طلب جديد</span>
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
-            <Link
-              to="/developer-network"
-              className="bg-white text-[#004ac6] text-lg font-semibold px-8 py-4 rounded-xl border border-[#004ac6]/30 hover:bg-[#f2f4f6] transition-all active:scale-95 flex items-center gap-3"
-            >
-              <span>انضم لشبكة المطورين</span>
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
-          </div>
+          <Link
+            to="/request"
+            className="bg-[#2563eb] text-white text-lg font-semibold px-10 py-4 rounded-xl shadow-lg hover:bg-[#004ac6] transition-all active:scale-95 flex items-center gap-3"
+          >
+            <span>إرسال طلب جديد</span>
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
         </div>
       </section>
     </div>

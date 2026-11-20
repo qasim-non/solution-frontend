@@ -113,7 +113,7 @@ export const DeveloperRegistrationPage: React.FC = () => {
   const handleSubmitError = (error: unknown) => {
     if (!axios.isAxiosError<ApiValidationErrorResponse>(error)) {
       setFormError(
-        'تعذّر إرسال الطلب. يرجى التحقق من اتصالك والمحاولة مرة أخرى.'
+        'تعذّر إرسال الطلب. يرجى التحقق من اتصالك والمحاولة مرة أخرى'
       );
       return;
     }
@@ -128,7 +128,7 @@ export const DeveloperRegistrationPage: React.FC = () => {
       if (Object.keys(fieldErrors).length > 0) {
         setErrors(fieldErrors);
         goToStep(firstStepWithError(fieldErrors));
-        setFormError('يرجى تصحيح الحقول المحددة ثم إعادة المحاولة.');
+        setFormError('يرجى تصحيح الحقول المحددة ثم إعادة المحاولة');
         return;
       }
     }
@@ -138,22 +138,22 @@ export const DeveloperRegistrationPage: React.FC = () => {
 
       setFormError(
         Number.isFinite(retryAfter) && retryAfter > 0
-          ? `تم استلام عدد كبير من الطلبات. يرجى المحاولة بعد ${retryAfter} ثانية.`
-          : 'تم استلام عدد كبير من الطلبات من شبكتك. يرجى الانتظار قليلاً ثم المحاولة مرة أخرى.'
+          ? `تم استلام عدد كبير من الطلبات. يرجى المحاولة بعد ${retryAfter} ثانية`
+          : 'تم استلام عدد كبير من الطلبات من شبكتك. يرجى الانتظار قليلاً ثم المحاولة مرة أخرى'
       );
       return;
     }
 
     if (status && status >= 500) {
       setFormError(
-        'تعذّر إرسال الطلب بسبب خطأ في الخادم. يرجى المحاولة لاحقاً.'
+        'تعذّر إرسال الطلب بسبب خطأ في الخادم. يرجى المحاولة لاحقاً'
       );
       return;
     }
 
     setFormError(
       error.response?.data?.message ||
-        'تعذّر إرسال الطلب. يرجى التحقق من اتصالك والمحاولة مرة أخرى.'
+        'تعذّر إرسال الطلب. يرجى التحقق من اتصالك والمحاولة مرة أخرى'
     );
   };
 
@@ -336,7 +336,7 @@ export const DeveloperRegistrationPage: React.FC = () => {
                 </button>
               ) : (
                 <p className="hidden text-xs font-medium text-[#737686] sm:block">
-                  لن تُرسل بياناتك إلا عند الضغط على إرسال الطلب.
+                  لن تُرسل بياناتك إلا عند الضغط على إرسال الطلب
                 </p>
               )}
 

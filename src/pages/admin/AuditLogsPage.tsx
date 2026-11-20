@@ -66,11 +66,11 @@ export const AuditLogsPage: React.FC = () => {
     event.preventDefault();
 
     if (Boolean(startDate) !== Boolean(endDate)) {
-      setFilterError('أدخل تاريخ البدء وتاريخ الانتهاء معاً.');
+      setFilterError('أدخل تاريخ البدء وتاريخ الانتهاء معاً');
       return;
     }
     if (startDate && endDate && endDate < startDate) {
-      setFilterError('تاريخ الانتهاء يجب أن يكون نفس اليوم أو بعد تاريخ البدء.');
+      setFilterError('تاريخ الانتهاء يجب أن يكون نفس اليوم أو بعد تاريخ البدء');
       return;
     }
 
@@ -83,7 +83,7 @@ export const AuditLogsPage: React.FC = () => {
     <div className="space-y-6 rtl">
       <AdminHeader
         title="سجل النشاطات"
-        subtitle="سجل موثق لعمليات الإدارة التي تؤثر على الطلبات والمطورين والرسائل."
+        subtitle="سجل موثق لعمليات الإدارة التي تؤثر على الطلبات والمطورين والرسائل"
       />
 
       <AdminCard title="تصفية السجل" bodyClassName="p-5">
@@ -166,7 +166,7 @@ export const AuditLogsPage: React.FC = () => {
           <LoadingState label="جاري تحميل السجل..." />
         ) : logsQuery.isError ? (
           <ErrorState
-            message={getApiErrorMessage(logsQuery.error, 'تعذّر تحميل سجل النشاطات.')}
+            message={getApiErrorMessage(logsQuery.error, 'تعذّر تحميل سجل النشاطات')}
             onRetry={() => void logsQuery.refetch()}
           />
         ) : logs.length === 0 ? (

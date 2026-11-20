@@ -93,7 +93,7 @@ function waitForServiceWorkerActivation(
       window.clearTimeout(timeout);
       pendingWorker.removeEventListener('statechange', onStateChange);
       reject(
-        new Error('تعذر تفعيل خدمة الإشعارات. أعد تحميل الصفحة وحاول مرة أخرى.')
+        new Error('تعذر تفعيل خدمة الإشعارات. أعد تحميل الصفحة وحاول مرة أخرى')
       );
     };
 
@@ -154,27 +154,27 @@ export async function registerPushNotifications(): Promise<string> {
   // Push notifications are an admin-only feature. The API also enforces this,
   // but failing early gives the user a clear message.
   if (!storage.getToken()) {
-    throw new Error('يجب تسجيل الدخول كمدير لتفعيل الإشعارات.');
+    throw new Error('يجب تسجيل الدخول كمدير لتفعيل الإشعارات');
   }
 
   if (!isPushConfigured()) {
-    throw new Error('إشعارات الدفع غير مهيأة على هذا الموقع.');
+    throw new Error('إشعارات الدفع غير مهيأة على هذا الموقع');
   }
 
   if (!isPushSupported()) {
-    throw new Error('هذا المتصفح لا يدعم إشعارات الدفع.');
+    throw new Error('هذا المتصفح لا يدعم إشعارات الدفع');
   }
 
   const permission = await Notification.requestPermission();
 
   if (permission !== 'granted') {
-    throw new Error('تم رفض إذن الإشعارات. يمكنك تفعيله من إعدادات المتصفح.');
+    throw new Error('تم رفض إذن الإشعارات. يمكنك تفعيله من إعدادات المتصفح');
   }
 
   const messaging = await getMessagingInstance();
 
   if (!messaging) {
-    throw new Error('تعذر تهيئة إشعارات الدفع في هذا المتصفح.');
+    throw new Error('تعذر تهيئة إشعارات الدفع في هذا المتصفح');
   }
 
   const token = await getToken(messaging, {

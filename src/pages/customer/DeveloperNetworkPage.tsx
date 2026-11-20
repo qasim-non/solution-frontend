@@ -15,21 +15,21 @@ const benefits = [
     icon: Code2,
     title: 'مشاريع حقيقية ومستمرة',
     description:
-      'فرص عمل برمجية جاهزة للتنفيذ في مجالات الويب، التطبيقات والأنظمة دون الحاجة للبحث عن عملاء أو التفاوض المرهق.',
+      'فرص عمل برمجية جاهزة للتنفيذ في مجالات الويب، التطبيقات والأنظمة دون الحاجة للبحث عن عملاء أو التفاوض المرهق',
     iconClassName: 'bg-primary-fixed text-primary',
   },
   {
     icon: Wallet,
     title: 'عوائد مالية مجزية وموثوقة',
     description:
-      'دفعات نقدية واضحة ومضمونة ومحولة فور تسليم المهام مع اتفاقيات مالية شفافة، عادلة وبدون تأخيرات بنكية.',
+      'دفعات نقدية واضحة ومضمونة ومحولة فور تسليم المهام مع اتفاقيات مالية شفافة، عادلة وبدون تأخيرات بنكية',
     iconClassName: 'bg-tertiary-fixed text-tertiary-container',
   },
   {
     icon: Laptop,
     title: 'مرونة كاملة عن بُعد',
     description:
-      'اعمل من أي مكان وفي الأوقات التي تناسب جدولك، سواء بدوام جزئي مرن أو تفرغ هندسي كامل حسب رغبتك.',
+      'اعمل من أي مكان وفي الأوقات التي تناسب جدولك، سواء بدوام جزئي مرن أو تفرغ هندسي كامل حسب رغبتك',
     iconClassName: 'bg-secondary-fixed text-secondary',
   },
 ] as const;
@@ -57,7 +57,7 @@ export const DeveloperNetworkPage: React.FC = () => {
 
           <p className="mb-8 max-w-2xl text-base leading-relaxed text-on-surface-variant md:text-lg md:leading-7">
             انضم إلى نخبة المهندسين والمطورين في «حلول برمجية» واستلم مهام تقنية
-            ومشاريع واضحة بعقود موثوقة وعوائد فورية دون تعقيد.
+            ومشاريع واضحة بعقود موثوقة وعوائد فورية دون تعقيد
           </p>
 
           <div className="flex w-full max-w-sm flex-col items-center gap-2">
@@ -90,7 +90,7 @@ export const DeveloperNetworkPage: React.FC = () => {
             </h2>
             <p className="mt-2 max-w-lg text-sm leading-6 text-on-surface-variant">
               بيئة هندسية احترافية صُممت لتمكين المطور من الإبداع دون الانشغال
-              بإدارة العلاقات التجارية.
+              بإدارة العلاقات التجارية
             </p>
           </div>
 
@@ -130,7 +130,7 @@ export const DeveloperNetworkPage: React.FC = () => {
           </h2>
           <p className="max-w-xl text-sm leading-relaxed text-on-surface-variant md:text-base">
             سجّل بياناتك وخبراتك التقنية، وسيقوم فريقنا بمراجعة ملفك والتواصل معك
-            عند توفر مشاريع مناسبة.
+            عند توفر مشاريع مناسبة
           </p>
           <Link
             to="/join-developer"

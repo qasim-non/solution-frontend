@@ -3,6 +3,7 @@ import { Code2, Users } from 'lucide-react';
 
 interface PublicStatisticsBarProps {
   className?: string;
+  variant?: 'floating' | 'solid';
 }
 
 const formatCount = (value: number): string =>
@@ -13,7 +14,10 @@ const formatCount = (value: number): string =>
  * flight, or if it fails, nothing is rendered so no estimated or stale counts
  * are ever presented as real data.
  */
-export function PublicStatisticsBar({ className = '' }: PublicStatisticsBarProps) {
+export function PublicStatisticsBar({
+  className = '',
+  variant = 'floating',
+}: PublicStatisticsBarProps) {
   const statisticsQuery = usePublicStatistics();
   const statistics = statisticsQuery.data;
 
@@ -21,11 +25,19 @@ export function PublicStatisticsBar({ className = '' }: PublicStatisticsBarProps
     return null;
   }
 
+  const isSolid = variant === 'solid';
+  const shellClassName = isSolid
+    ? 'rounded-2xl border border-[#e0e3e5] bg-white p-6 shadow-sm sm:p-8'
+    : 'rounded-2xl border border-outline-variant/40 bg-surface-container-lowest/90 p-6 shadow-sm backdrop-blur-xl sm:p-8';
+  const dividerClassName = isSolid
+    ? 'divide-[#e0e3e5]'
+    : 'divide-surface-container';
+
   return (
-    <div
-      className={`rounded-2xl border border-outline-variant/40 bg-surface-container-lowest/90 p-6 shadow-sm backdrop-blur-xl sm:p-8 ${className}`}
-    >
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:divide-x sm:divide-x-reverse sm:divide-surface-container">
+    <div dir="rtl" className={`${shellClassName} ${className}`}>
+      <div
+        className={`grid grid-cols-1 gap-6 sm:grid-cols-2 sm:divide-x sm:divide-x-reverse ${dividerClassName}`}
+      >
         <div className="flex items-center justify-center gap-4 p-2">
           <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
             <Code2 className="h-7 w-7" />

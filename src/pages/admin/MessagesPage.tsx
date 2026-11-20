@@ -41,7 +41,7 @@ export const MessagesPage: React.FC = () => {
       });
     },
     onError: (error) => {
-      setActionError(getApiErrorMessage(error, 'تعذّر حذف الرسالة.'));
+      setActionError(getApiErrorMessage(error, 'تعذّر حذف الرسالة'));
     },
   });
 
@@ -54,7 +54,7 @@ export const MessagesPage: React.FC = () => {
     <div className="space-y-6 rtl">
       <AdminHeader
         title="صندوق الرسائل"
-        subtitle="الرسائل الواردة من نموذج التواصل في الموقع العام."
+        subtitle="الرسائل الواردة من نموذج التواصل في الموقع العام"
       />
 
       {actionError && (
@@ -74,7 +74,7 @@ export const MessagesPage: React.FC = () => {
           <ErrorState
             message={getApiErrorMessage(
               messagesQuery.error,
-              'تعذر تحميل الرسائل. قد تكون الجلسة منتهية.'
+              'تعذر تحميل الرسائل. قد تكون الجلسة منتهية'
             )}
             onRetry={() => void messagesQuery.refetch()}
           />

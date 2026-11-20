@@ -99,7 +99,7 @@ export const DeveloperRegistrationSuccessPage: React.FC = () => {
         </h1>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#434655]">
           شكراً لانضمامك إلى شبكة مطوري «حلول برمجية». سيقوم الفريق الهندسي
-          بمراجعة بياناتك والتواصل معك عبر الواتساب فور توفر فرصة تلائم خبرتك.
+          بمراجعة بياناتك والتواصل معك عبر الواتساب فور توفر فرصة تلائم خبرتك
         </p>
       </div>
 
@@ -133,7 +133,7 @@ export const DeveloperRegistrationSuccessPage: React.FC = () => {
                   </h3>
                   <p className="mt-1 text-sm leading-relaxed text-[#434655]">
                     مراجعة نماذج أعمالك ومطابقة خبراتك مع المشاريع الحالية
-                    والمستقبلية.
+                    والمستقبلية
                   </p>
                 </div>
               </div>
@@ -148,7 +148,7 @@ export const DeveloperRegistrationSuccessPage: React.FC = () => {
                   </h3>
                   <p className="mt-1 text-sm leading-relaxed text-[#434655]">
                     سنتواصل معك مباشرة عبر رقم هاتفك فور توفر فرصة عمل أو شراكة
-                    مناسبة.
+                    مناسبة
                   </p>
                 </div>
               </div>
@@ -158,7 +158,7 @@ export const DeveloperRegistrationSuccessPage: React.FC = () => {
           <div className="mt-6 flex items-start gap-2 rounded-xl bg-[#f2f4f6] p-3.5 text-xs text-[#434655]">
             <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#006242]" />
             <span>
-              ملفاتك محفوظة بشكل خاص ولا يتم مشاركتها مع أي جهة خارجية.
+              ملفاتك محفوظة بشكل خاص ولا يتم مشاركتها مع أي جهة خارجية
             </span>
           </div>
         </section>
@@ -235,7 +235,7 @@ export const DeveloperRegistrationSuccessPage: React.FC = () => {
                     ))
                   ) : (
                     <span className="text-xs text-[#737686]">
-                      لم يتم تحديد تخصصات.
+                      لم يتم تحديد تخصصات
                     </span>
                   )}
                 </dd>
@@ -257,7 +257,7 @@ export const DeveloperRegistrationSuccessPage: React.FC = () => {
             </p>
             <p className="mt-1 text-xs leading-relaxed text-[#434655]">
               استخدم الرقم المرجعي عند التواصل مع فريق استقطاب الكفاءات
-              للاستفسار عن حالة طلبك.
+              للاستفسار عن حالة طلبك
             </p>
           </div>
         </aside>

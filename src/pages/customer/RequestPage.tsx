@@ -87,19 +87,19 @@ export const RequestPage: React.FC = () => {
     const cleanDescription = description.trim();
 
     if (name.length < 3 || name.length > 100) {
-      errors.project_name = 'اسم المشروع يجب أن يكون بين 3 و 100 حرف.';
+      errors.project_name = 'اسم المشروع يجب أن يكون بين 3 و 100 حرف';
     }
 
     if (mobile.length < 10 || mobile.length > 20) {
-      errors.mobile = 'رقم الواتساب يجب أن يكون بين 10 و 20 خانتاً.';
+      errors.mobile = 'رقم الواتساب يجب أن يكون بين 10 و 20 خانتاً';
     }
 
     if (selectedSystemTypes.length === 0) {
-      errors.system_types = 'اختر نوع نظام واحد على الأقل.';
+      errors.system_types = 'اختر نوع نظام واحد على الأقل';
     }
 
     if (cleanDescription.length > 1000) {
-      errors.description = 'الملاحظات لا يمكن أن تتجاوز 1000 حرف.';
+      errors.description = 'الملاحظات لا يمكن أن تتجاوز 1000 حرف';
     }
 
     SOCIAL_PLATFORMS.forEach((platform) => {
@@ -109,7 +109,7 @@ export const RequestPage: React.FC = () => {
       }
       if (value.length > 255 || !isValidHttpUrl(value)) {
         errors[`social_media.${platform.id}`] =
-          'أدخل رابطاً صحيحاً يبدأ بـ https:// ولا يتجاوز 255 حرفاً.';
+          'أدخل رابطاً صحيحاً يبدأ بـ https:// ولا يتجاوز 255 حرفاً';
       }
     });
 
@@ -123,7 +123,7 @@ export const RequestPage: React.FC = () => {
     const errors = validate();
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
-      setFormError('يرجى تصحيح الحقول المحددة ثم إعادة المحاولة.');
+      setFormError('يرجى تصحيح الحقول المحددة ثم إعادة المحاولة');
       return;
     }
 
@@ -162,7 +162,7 @@ export const RequestPage: React.FC = () => {
           )
         );
       }
-      setFormError(getApiErrorMessage(error, 'حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى.'));
+      setFormError(getApiErrorMessage(error, 'حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى'));
     } finally {
       setIsSubmitting(false);
     }
@@ -188,7 +188,7 @@ export const RequestPage: React.FC = () => {
           <div>
             <h1 className="text-xl font-bold text-on-surface">طلب مشروع جديد</h1>
             <p className="mt-1 text-sm text-on-surface-variant">
-              قم بتعبئة التفاصيل أدناه لنتمكن من فهم متطلباتك بوضوح.
+              قم بتعبئة التفاصيل أدناه لنتمكن من فهم متطلباتك بوضوح
             </p>
           </div>
           <div className="flex items-center gap-2 text-sm font-semibold text-primary">
@@ -234,12 +234,12 @@ export const RequestPage: React.FC = () => {
               <label className="text-sm font-bold text-on-surface" htmlFor="whatsapp">
                 رقم الواتساب <span className="text-error">*</span>
               </label>
-              <div className="flex" dir="rtl">
+              <div className="flex h-12 w-full items-stretch" dir="rtl">
                 <select
                   value={countryCode}
                   onChange={(event) => setCountryCode(event.target.value)}
                   dir="rtl"
-                  className="h-full flex-shrink-0 rounded-r-xl border border-l-0 border-outline-variant/70 bg-surface-container-high px-3 text-sm text-on-surface-variant outline-none focus:border-primary"
+                  className="h-full w-[126px] shrink-0 rounded-r-xl border border-l-0 border-outline-variant/70 bg-surface-container-high px-2 text-sm text-on-surface-variant outline-none focus:border-primary sm:w-[150px] sm:px-3"
                 >
                   <option value="+966">السعودية 🇸🇦 +966</option>
                   <option value="+971">الإمارات 🇦🇪 +971</option>
@@ -276,7 +276,7 @@ export const RequestPage: React.FC = () => {
                   }}
                   placeholder="5X XXX XXXX"
                   dir="ltr"
-                  className={`w-full rounded-l-xl border border-r-0 bg-surface-container-low px-4 py-3 text-left text-sm text-on-surface outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary ${
+                  className={`h-full min-w-0 flex-1 rounded-l-xl border border-r-0 bg-surface-container-low px-3 py-0 text-left text-sm text-on-surface outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary ${
                     fieldErrors.mobile ? 'border-error' : 'border-outline-variant/70'
                   }`}
                 />
@@ -292,7 +292,7 @@ export const RequestPage: React.FC = () => {
               <h2 className="mb-1 text-sm font-bold text-on-surface">
                 نوع النظام المطلوب <span className="text-error">*</span>
               </h2>
-              <p className="text-xs text-on-surface-variant">يمكنك اختيار أكثر من خيار.</p>
+              <p className="text-xs text-on-surface-variant">يمكنك اختيار أكثر من خيار</p>
             </div>
 
             {systemTypesQuery.isLoading ? (
@@ -302,7 +302,7 @@ export const RequestPage: React.FC = () => {
               </div>
             ) : systemTypesQuery.isError ? (
               <div className="rounded-xl bg-error-container p-4 text-sm font-semibold text-on-error-container">
-                تعذّر تحميل أنظمة العمل. يرجى المحاولة مرة أخرى.
+                تعذّر تحميل أنظمة العمل. يرجى المحاولة مرة أخرى
                 <button
                   type="button"
                   onClick={() => void systemTypesQuery.refetch()}
@@ -312,7 +312,7 @@ export const RequestPage: React.FC = () => {
                 </button>
               </div>
             ) : systemTypes.length === 0 ? (
-              <p className="py-4 text-sm text-on-surface-variant">لا توجد أنظمة متاحة حالياً.</p>
+              <p className="py-4 text-sm text-on-surface-variant">لا توجد أنظمة متاحة حالياً</p>
             ) : (
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 {systemTypes.map((type) => {
@@ -399,7 +399,7 @@ export const RequestPage: React.FC = () => {
             )}
             <p className="mt-2 flex items-center gap-1 text-xs text-on-surface-variant">
               <Info className="h-3.5 w-3.5 text-primary" />
-              <span>أضف واحداً على الأقل إن وُجد، بصيغة رابط كامل.</span>
+              <span>أضف واحداً على الأقل إن وُجد، بصيغة رابط كامل</span>
             </p>
           </div>
 
